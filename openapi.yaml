@@ -2216,7 +2216,8 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createCompanyMembership
-            summary: Create company membership
+            summary: Create Company Membership
+            description: creates company memberships
             tags:
                 - companies
             parameters:

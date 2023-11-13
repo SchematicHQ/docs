@@ -65,15 +65,85 @@
       "group": "API Documentation",
       "pages": ["api-reference/authentication"]
     },
+      {
+    "group": "Accounts",
+    "pages": [
+      "api-reference/accounts/list-api-keys",
+      "api-reference/accounts/create-api-key",
+      "api-reference/accounts/get-api-key",
+      "accounts/update-api-key",
+      "api-reference/accounts/delete-api-key",
+      "api-reference/accounts/count-api-keys",
+      "api-reference/accounts/create-environment",
+      "api-reference/accounts/update-environment",
+      "api-reference/accounts/delete-environment"
+    ]
+  },
+  {
+    "group": "Plans",
+    "pages": [
+      "api-reference/plans/upsert-billing-period",
+      "api-reference/plans/sync-company-plans",
+      "api-reference/plans/list-plans",
+      "api-reference/plans/create-plan",
+      "api-reference/plans/get-plan",
+      "api-reference/plans/update-plan",
+      "api-reference/plans/delete-plan"
+    ]
+  },
+  {
+    "group": "Companies",
+    "pages": [
+      "api-reference/companies/list-companies",
+      "api-reference/companies/create-company",
+      "api-reference/companies/get-company",
+      "api-reference/companies/list-company-memberships",
+      "api-reference/companies/create-company-membership",
+      "api-reference/companies/delete-company-membership",
+      "api-reference/companies/update-entity-trait-definition"
+    ]
+  },
     {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/update",
-        "api-reference/endpoint/delete"
-      ]
-    }
+    "group": "Users",
+    "pages": [
+      "api-reference/companies/list-users",
+      "api-reference/companies/create-user",
+      "api-reference/companies/get-user"
+    ]
+  },
+  {
+    "group": "Events",
+    "pages": [
+      "api-reference/events/list-event-types",
+      "api-reference/events/get-event-type",
+      "api-reference/events/count-event-types",
+      "api-reference/events/list-events",
+      "api-reference/events/create-event",
+      "api-reference/events/get-event",
+      "api-reference/events/count-events"
+    ]
+  },
+  {
+    "group": "Features",
+    "pages": [
+      "api-reference/features/list-features",
+      "api-reference/features/create-feature",
+      "api-reference/features/get-feature",
+      "api-reference/features/update-feature",
+      "api-reference/features/delete-feature",
+      "api-reference/features/list-flag-checks",
+      "api-reference/features/latest-flag-checks",
+      "api-reference/features/list-flag-values",
+      "api-reference/features/count-flag-values",
+      "api-reference/features/list-flags",
+      "api-reference/features/create-flag",
+      "api-reference/features/get-flag",
+      "api-reference/features/update-flag",
+      "api-reference/features/delete-flag",
+      "api-reference/features/check-flag",
+      "api-reference/features/check-flags"
+    ]
+  }
   ],
   "footerSocials": {
     "twitter": "https://twitter.com/mintlify",
