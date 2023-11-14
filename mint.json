@@ -39,22 +39,26 @@
     {
       "name": "Documentation",
       "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
+      "url": "/docs"
     },
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://schematichq.com/blog"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
+      "pages": ["introduction", "quickstart"]
     },
     {
-      "group": "Essentials",
-      "pages": ["essentials/markdown", "essentials/code", "essentials/images", "essentials/settings", "essentials/navigation"]
+      "group": "SDKs",
+      "pages": ["sdks/concepts", "sdks/javascript", "sdks/ruby"]
+    },
+    {
+      "group": "Integrations",
+      "pages": ["integrations/stripe"]
     },
     {
       "group": "API Documentation",
@@ -66,7 +70,7 @@
       "api-reference/accounts/list-api-keys",
       "api-reference/accounts/create-api-key",
       "api-reference/accounts/get-api-key",
-      "accounts/update-api-key",
+      "api-reference/accounts/update-api-key",
       "api-reference/accounts/delete-api-key",
       "api-reference/accounts/count-api-keys",
       "api-reference/accounts/create-environment",

@@ -1,0 +1,68 @@
+---
+title: Javascript (Client)
+description: ""
+---
+
+### Installation
+
+The schematic-js SDK is hosted here: [`https://cdn.schematichq.com/js/schematic.js`](https://cdn.schematichq.com/js/schematic.js). Paste the following into the `<head>` tag of your site.
+
+```javascript
+<script src="https://cdn.schematichq.com/js/schematic.js" async="async"></script>
+```
+
+The snippet will load schematic.js onto the page asynchronously, so it won’t impact page load speed. Once the snippet runs on your site, you can submit requests using your [Publishable key](https://localhost:3000/quickstart#create-an-api-key).
+
+### Initialization
+
+Initialize the SDK with the following:
+
+```javascript
+var schematic = new Schematic("your-api-key");
+```
+
+### Usage example
+
+Once the SDK is initialized, you may submit requests. Below is an example.
+
+```javascript
+// Send an identify event
+const userId = "my-user-id";
+const keys = {
+  id: userId,
+};
+const traits = {
+  anykey: "anyval",
+};
+const company = {
+  name: "My Company",
+  keys: {
+    id: "my-company-id",
+  },
+  traits: {
+    location: "Atlanta, GA",
+  }
+};
+schematic.identify({ keys, traits, company });
+
+// Send a track event
+const event = "query";
+const traits = {};
+const company = {};
+const user = {};
+
+schematic.track({
+  event: "query",
+  traits: {
+      feature: "feat_cns2asuKAG2",
+  },
+  company: {
+    id: "my-company-id",
+  },
+  user: {
+    id: "my-user-id",
+  },
+});
+```
+
+The Javasript SDK references companies or users by their Schematic ID using the `id` key or by any key you have defined and passed to Schematic previously.
