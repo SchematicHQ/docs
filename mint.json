@@ -3,8 +3,8 @@
   "name": "Schematic",
   "openapi": ["/openapi.yaml"],
   "logo": {
-    "dark": "/logo/logo.png",
-    "light": "/logo/logo.png"
+    "dark": "https://schematic-public-assets.s3.amazonaws.com/logos/white-text.png",
+    "light": "https://schematic-public-assets.s3.amazonaws.com/logos/black-text.png"
   },
   "favicon": "/favicon.png",
   "colors": {
