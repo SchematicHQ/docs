@@ -142,7 +142,7 @@ Optionally, add an event to the feature to track usage and to use in rules that 
 
 4. **Define rules**
 
-Once you’ve finished creating the feature, click “Add a new rule” and use the available criteria to build targeting rules. In this example, we’re going to use the Company criteria to target [the company we created earlier](https://www.notion.so/Docs-MVP-e9824df9f89b4d52913581bd6db6a01c?pvs=21), “Example Company”. Once you’ve set up the rule, click “Review” at the top of your screen to verify you’d like the rule to be added and “Save” in the modal.
+Once you’ve finished creating the feature, click “Add a new rule” and use the available criteria to build targeting rules. In this example, we’re going to use the Company criteria to target [the company we created earlier](/quickstart#creating-companies-and-users), “Example Company”. Once you’ve set up the rule, click “Review” at the top of your screen to verify you’d like the rule to be added and “Save” in the modal.
 
 Now when checking whether this feature is available to “Example Company” within your application, Schematic will return True.
 
@@ -152,7 +152,7 @@ Now when checking whether this feature is available to “Example Company” wit
 
 5. **Check the feature**
 
-Follow the steps in [Creating companies and users](https://www.notion.so/Docs-MVP-e9824df9f89b4d52913581bd6db6a01c?pvs=21) to initialize the Javascript SDK. Once you have, copy and paste the below into your console. 
+Follow the steps in [Creating companies and users](/quickstart#creating-companies-and-users) to initialize the Javascript SDK. Once you have, copy and paste the below into your console. 
 
 We passed a key called “companyId” earlier when we created “Example Company”, and we can use it here so Schematic checks the feature and returns a result for “Example Company” specifically (this can also be done at the user level). Because Schematic creates user and company profiles by storing context and usage from your application and Stripe, it is not necessary to pass additional context when submitting a checkFlag request.
 
