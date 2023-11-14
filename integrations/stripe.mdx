@@ -11,22 +11,34 @@ Go to [Settings > Stripe Integration](https://app.schematichq.com/settings/strip
 
 <Info>Only active Stripe accounts are allowed in Production environments. Test Stripe accounts can be used in Development and Staging environments.</Info>
 
-...
+<img
+  src="/images/integration_stripe_1.png"
+/>
+
+<img
+  src="/images/integration_stripe_2.png"
+/>
 
 2. **Create a new restricted API key in your Stripe account**
 
 Navigate to the [Developers > API keys](https://dashboard.stripe.com/login?redirect=%2Ftest%2Fapikeys) section of your Stripe account. Click “Create restricted key”. Name the key “Schematic”, and allow Read permissions for “All core resources”.
 
-...
+<img
+  src="/images/integration_stripe_3.png"
+/>
 
 3. **Submit the “Schematic” key to Fivetran**
 
 Copy and paste the new key in the Fivetran screen. Do not click “Enable Connected Accounts”. Press Continue.
 
-...
+<img
+  src="/images/integration_stripe_4.png"
+/>
 
 The length of the initial sync will depend on how much data is in your Stripe account. Once the sync is done, you should see a “Last data sync” timestamp in your Settings tab in addition to a “Connected since” timestamp. The “Initial data sync in progress” flag should also no longer be visible.
 
-...
+<img
+  src="/images/integration_stripe_5.png"
+/>
 
 <Info>Schematic associates Stripe data with companies based on the `stripe_customer_id` key. When creating or updating companies from your application, make sure to pass the corresponding `stripe_customer_id` in the `keys` object. If you don’t, subscription data will not be associated with Schematic companies, and those companies will not be associated with the appropriate Schematic plans.</Info>

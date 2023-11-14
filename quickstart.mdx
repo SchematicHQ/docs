@@ -9,13 +9,17 @@ description: 'Start using Schematic in under 5 minutes'
 
 Manage and create new environments using the environment dropdown in the top right corner of Schematic. You can create API keys for each environment indpedently in Settings.
 
-...
+<img
+  src="/images/quickstart_api_1.png"
+/>
 
 ### Create an API key
 
 Navigate to the API Keys section of your Settings page to generate your API keys. Once you create a key, an ID and a Secret will be generated. Make sure to store your Secret key in a secure place — Schematic will not display it again after it has been generated.
 
-...
+<img
+  src="/images/quickstart_api_2.png"
+/>
 
 
 **Secret Keys** are used only for server-side integrations. These keys are meant to be confidential, so they should not be used on clients.
@@ -32,7 +36,6 @@ Now that you have your Schematic account set up and you have an API key, let’s
 
 Let’s go ahead and make an identify call using the Javascript SDK.
 
-
 <Info>ℹ️ Schematic supports several SDKs. Check them out [here]().</Info>
 
 The schematic-js SDK is hosted here: https://cdn.schematichq.com/js/schematic.js. Copy and paste the following code into your console:
@@ -44,7 +47,10 @@ sch_script.src =
 document.getElementsByTagName("head")[0].appendChild(sch_script);
 ```
 
-...
+<img
+  src="/images/quickstart_company_1.png"
+/>
+
 
 2. **Initialize the Javascript SDK**
 
@@ -54,7 +60,9 @@ Copy and paste the following into your console and replace `your-api-key` with y
 const schematic = new Schematic("your-api-key");
 ```
 
-...
+<img
+  src="/images/quickstart_company_2.png"
+/>
 
 3. **Create a new user and new company**
 
@@ -86,15 +94,21 @@ const company = {
 schematic.identify({ name: userName, keys, traits, company });
 ```
 
-...
+<img
+  src="/images/quickstart_company_3.png"
+/>
 
 4. **Confirm the user and company were created in Schematic**
 
 Navigate to the [Users](https://app.schematichq.com/users) and [Companies](https://app.schematichq.com/companies) tabs to verify your test call has resulted in a new User and a new Company in your Schematic account.
 
-...
+<img
+  src="/images/quickstart_company_4.png"
+/>
 
-...
+<img
+  src="/images/quickstart_company_5.png"
+/>
 
 Identify calls are upserts, so any subsequent call using the same `keys` will update these records rather than create an entirely new one. Additionally, you may use any information stored against both objects to construct rules for feature targeting within Schematic.
 
@@ -106,19 +120,25 @@ The next step is to add your features to Schematic. Let’s add an example, Sear
 
 On the main [dashboard](https://app.schematichq.com/features), click “Create”. In the modal, add a name, description, and lifecycle phase. It’s important to add a complete description so that other users know exactly what this feature is related to in your application.
 
-...
+<img
+  src="/images/quickstart_features_1.png"
+/>
 
 2. **Add a key to the feature**
 
 You’ll use this key within your application to reference this feature.
 
-...
+<img
+  src="/images/quickstart_features_2.png"
+/>
 
 3. **Attach an event to the feature**
 
 Optionally, add an event to the feature to track usage and to use in rules that enforce feature limits.
 
-...
+<img
+  src="/images/quickstart_features_3.png"
+/>
 
 4. **Define rules**
 
@@ -126,7 +146,9 @@ Once you’ve finished creating the feature, click “Add a new rule” and use 
 
 Now when checking whether this feature is available to “Example Company” within your application, Schematic will return True.
 
-...
+<img
+  src="/images/quickstart_features_4.png"
+/>
 
 5. **Check the feature**
 
@@ -140,7 +162,9 @@ We passed a key called “companyId” earlier when we created “Example Compan
 await schematic.checkFlag("search-queries", { company: { companyId: "FqaaszD" } } )
 ```
 
-...
+<img
+  src="/images/quickstart_features_5.png"
+/>
 
 <Info>On the client-side, checkFlag is an asynchronous Javascript function that returns a promise.</Info>
 
@@ -152,7 +176,9 @@ Plans describes plans in your application. Let’s walk through creating a plan 
 
 Navigate to the plans tab and click “Create plan”. Add name, a description, and a type.
 
-...
+<img
+  src="/images/quickstart_plans_1.png"
+/>
 
 2. **Connect your plan to a Stripe product**
 
@@ -160,9 +186,13 @@ For this step, you’ll need to [connect Stripe](). Connecting Stripe will allow
 
 Once Stripe is connected, navigate to the plan you’ve just created and click “Edit plan”. In the modal, click “Integrate”, and pick the appropriate Stripe product that corresponds to the Schematic plan. Click “Save”.
 
-...
+<img
+  src="/images/quickstart_plans_2.png"
+/>
 
-...
+<img
+  src="/images/quickstart_plans_3.png"
+/>
 
 <Info>Schematic associates Stripe data with customers based on the `stripe_customer_id` key. When creating or updating companies from your application, make sure to pass the corresponding `stripe_customer_id` in the `keys` object. If you don’t, subscription data will not be associated with Schematic companies, and those companies will not be associated with the appropriate Schematic plans.</Info>
 
@@ -185,8 +215,9 @@ sch_script.src =
 document.getElementsByTagName("head")[0].appendChild(sch_script);
 ```
 
-...
-
+<img
+  src="/images/quickstart_events_1.png"
+/>
 
 2. **Initialize the Javascript SDK**
 
@@ -196,7 +227,9 @@ Copy and paste the following into your console and replace your-api-key with you
 const schematic = new Schematic("your-api-key");
 ```
 
-...
+<img
+  src="/images/quickstart_events_2.png"
+/>
 
 3. **Create a new event**
 
@@ -226,12 +259,16 @@ schematic.track({
 });
 ```
 
-...
+<img
+  src="/images/quickstart_events_3.png"
+/>
 
 4. **Confirm the event was created in Schematic**
 
 Navigate to the [Events]() tab to verify your test call has resulted in a new event in your Schematic account.
 
-...
+<img
+  src="/images/quickstart_events_4.png"
+/>
 
 Track calls can be associated with Companies, Users, and Features by specifying each when submitting a request to Schematic. Additionally, you may use events to construct rules for feature targeting within Schematic.
