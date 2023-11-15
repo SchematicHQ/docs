@@ -11,13 +11,13 @@
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#DB6769",
-    "light": "#DE8284",
+    "light": "#AE87FF",
     "dark": "#0D001D",
     "background": {
-      "dark": "#1D0000"
+      "dark": "#090014"
     },
     "anchors": {
-      "from": "#194BFB",
+      "from": "#FF7F57",
       "to": "#DB6769"
     }
   },
