@@ -12,12 +12,12 @@
   "colors": {
     "primary": "#DB6769",
     "light": "#DE8284",
-    "dark": "#0D001D",
+    "dark": "#1D0000",
     "background": {
-      "dark": "#090014"
+      "dark": "#140000"
     },
     "anchors": {
-      "from": "#FF7F57",
+      "from": "#194BFB",
       "to": "#DB6769"
     }
   },
