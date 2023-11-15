@@ -136,7 +136,7 @@
       ]
     },
     {
-      "group": "Features",
+      "group": "features",
       "pages": [
         "api-reference/features/list-features",
         "api-reference/features/create-feature",
