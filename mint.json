@@ -78,14 +78,19 @@
       ]
     },
     {
-      "group": "Accounts",
+      "group": "API Keys",
       "pages": [
         "api-reference/accounts/list-api-keys",
         "api-reference/accounts/create-api-key",
         "api-reference/accounts/get-api-key",
         "api-reference/accounts/update-api-key",
         "api-reference/accounts/delete-api-key",
-        "api-reference/accounts/count-api-keys",
+        "api-reference/accounts/count-api-keys"
+      ]
+    },
+    {
+      "group": "Environments",
+      "pages": [
         "api-reference/accounts/create-environment",
         "api-reference/accounts/update-environment",
         "api-reference/accounts/delete-environment"
@@ -111,7 +116,12 @@
         "api-reference/companies/get-company",
         "api-reference/companies/list-company-memberships",
         "api-reference/companies/create-company-membership",
-        "api-reference/companies/delete-company-membership",
+        "api-reference/companies/delete-company-membership"
+      ]
+    },
+    {
+      "group": "Traits",
+      "pages": [
         "api-reference/companies/update-entity-trait-definition"
       ]
     },
@@ -142,7 +152,12 @@
         "api-reference/features/create-feature",
         "api-reference/features/get-feature",
         "api-reference/features/update-feature",
-        "api-reference/features/delete-feature",
+        "api-reference/features/delete-feature"
+      ]
+    },
+    {
+      "group": "flags",
+      "pages": [
         "api-reference/features/list-flag-checks",
         "api-reference/features/latest-flag-checks",
         "api-reference/features/list-flag-values",
@@ -158,8 +173,8 @@
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "github": "https://github.com/schematichq",
+    "linkedin": "https://www.linkedin.com/company/96648350/",
+    "website": "https://schematichq.com"
   }
 }
