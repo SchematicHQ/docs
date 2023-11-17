@@ -661,8 +661,6 @@ components:
                     nullable: true
                 name:
                     type: string
-                permissive:
-                    type: boolean
                 priority:
                     type: integer
                 priority_group:
@@ -672,7 +670,6 @@ components:
                     type: boolean
             required:
                 - name
-                - permissive
                 - priority
                 - value
                 - conditions
@@ -927,6 +924,8 @@ components:
                     nullable: true
                 event_summary:
                     $ref: '#/components/schemas/EventSummaryResponseData'
+                feature_type:
+                    type: string
                 flags:
                     type: array
                     items:
@@ -938,6 +937,9 @@ components:
                     nullable: true
                 name:
                     type: string
+                trait_id:
+                    type: string
+                    nullable: true
                 updated_at:
                     type: string
                     format: date-time
@@ -945,6 +947,7 @@ components:
                 - id
                 - name
                 - description
+                - feature_type
                 - created_at
                 - updated_at
                 - flags
@@ -960,6 +963,8 @@ components:
                 event_subtype:
                     type: string
                     nullable: true
+                feature_type:
+                    type: string
                 id:
                     type: string
                 lifecycle_phase:
@@ -967,6 +972,9 @@ components:
                     nullable: true
                 name:
                     type: string
+                trait_id:
+                    type: string
+                    nullable: true
                 updated_at:
                     type: string
                     format: date-time
@@ -974,6 +982,7 @@ components:
                 - id
                 - name
                 - description
+                - feature_type
                 - created_at
                 - updated_at
             title: FeatureResponseData
@@ -1118,8 +1127,6 @@ components:
                     type: string
                 name:
                     type: string
-                permissive:
-                    type: boolean
                 priority:
                     type: integer
                 priority_group:
@@ -1134,7 +1141,6 @@ components:
                 - id
                 - environment_id
                 - flag_id
-                - permissive
                 - priority
                 - name
                 - value
@@ -1156,8 +1162,6 @@ components:
                     type: string
                 name:
                     type: string
-                permissive:
-                    type: boolean
                 priority:
                     type: integer
                 priority_group:
@@ -1172,7 +1176,6 @@ components:
                 - id
                 - environment_id
                 - flag_id
-                - permissive
                 - priority
                 - name
                 - value
@@ -1190,6 +1193,34 @@ components:
                 - company_id
                 - user_id
             title: GetOrCreateCompanyMembershipRequestBody
+        MetricCountsHourlyResponseData:
+            type: object
+            properties:
+                company_id:
+                    type: string
+                    nullable: true
+                created_at:
+                    type: string
+                    format: date-time
+                environment_id:
+                    type: string
+                event_subtype:
+                    type: string
+                start_time:
+                    type: string
+                    format: date-time
+                user_id:
+                    type: string
+                    nullable: true
+                value:
+                    type: integer
+            required:
+                - environment_id
+                - event_subtype
+                - start_time
+                - value
+                - created_at
+            title: MetricCountsHourlyResponseData
         PlanResponseData:
             type: object
             description: The updated resource
@@ -2216,8 +2247,7 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createCompanyMembership
-            summary: Create Company Membership
-            description: creates company memberships
+            summary: Create company membership
             tags:
                 - companies
             parameters:
@@ -4083,6 +4113,245 @@ paths:
                                     - data
                                     - params
                                 title: CheckFlagsResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /metric-counts:
+        get:
+            operationId: listMetricCounts
+            summary: List metric counts
+            tags:
+                - events
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: start_time
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                    format: date-time
+                - name: end_time
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                    format: date-time
+                - name: event_subtype
+                  in: query
+                  required: true
+                  schema:
+                    type: string
+                - name: company_id
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: user_id
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  required: false
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  required: false
+                  schema:
+                    type: integer
+                - name: order
+                  in: query
+                  description: Order by column
+                  required: false
+                  schema:
+                    type: string
+                - name: dir
+                  in: query
+                  description: Order direction
+                  required: false
+                  schema:
+                    type: string
+                - name: grouping
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        description: The returned resources
+                                        items:
+                                            $ref: '#/components/schemas/MetricCountsHourlyResponseData'
+                                        title: ListMetricCountsResponseData
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            company_id:
+                                                type: string
+                                            dir:
+                                                type: string
+                                            end_time:
+                                                type: string
+                                                format: date-time
+                                            event_subtype:
+                                                type: string
+                                            grouping:
+                                                type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
+                                            order:
+                                                type: string
+                                            start_time:
+                                                type: string
+                                                format: date-time
+                                            user_id:
+                                                type: string
+                                        title: ListMetricCountsParams
+                                required:
+                                    - data
+                                    - params
+                                title: ListMetricCountsResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /metric-counts-hourly:
+        get:
+            operationId: listMetricCountsHourly
+            summary: List metric counts hourly
+            tags:
+                - events
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: start_time
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                    format: date-time
+                - name: end_time
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                    format: date-time
+                - name: event_subtype
+                  in: query
+                  required: true
+                  schema:
+                    type: string
+                - name: company_id
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: user_id
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  required: false
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  required: false
+                  schema:
+                    type: integer
+                - name: order
+                  in: query
+                  description: Order by column
+                  required: false
+                  schema:
+                    type: string
+                - name: dir
+                  in: query
+                  description: Order direction
+                  required: false
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        description: The returned resources
+                                        items:
+                                            $ref: '#/components/schemas/MetricCountsHourlyResponseData'
+                                        title: ListMetricCountsHourlyResponseData
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            company_id:
+                                                type: string
+                                            dir:
+                                                type: string
+                                            end_time:
+                                                type: string
+                                                format: date-time
+                                            event_subtype:
+                                                type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
+                                            order:
+                                                type: string
+                                            start_time:
+                                                type: string
+                                                format: date-time
+                                            user_id:
+                                                type: string
+                                        title: ListMetricCountsHourlyParams
+                                required:
+                                    - data
+                                    - params
+                                title: ListMetricCountsHourlyResponse
                 "400":
                     $ref: '#/components/responses/BadRequest'
                 "401":
