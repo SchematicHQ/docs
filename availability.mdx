@@ -1,0 +1,24 @@
+---
+title: Availability
+description: ""
+---
+
+As a business implementing Schematic, we understand you are trusting the solution to be highly available and reliable. Given the nature of the transactions that Schematic supports for businesses, we’re committed to both. 
+
+A high level diagram of our architecture is below.
+
+<img
+  src="/images/docs.png"
+/>
+
+Your application uses Schematic SDKs to connect to Schematic and uses that connection to share context about your companies and users, as well as to evaluate flags based on rule-based targeting set up in the application on anything you specify. Our SDKs are [here](/introduction#sdks).
+
+Schematic maintains a cache to minimize latency for every request.
+
+### Local caching
+
+There are two ways to evaluate flags with Schematic: at runtime or via locally stored flag values. In memory flag values can be updated periodically by requesting data from Schematic using the batch endpoint [here](/api-reference/features/list-flag-values). In the future, Schematic will invest in additional solutions for a local or persistent cache.  
+
+### Third party integrations
+
+Schematic connects to third party applications via Fivetran, which handles ETL (including retry and incremental sync logic) from those tools into Schematic. Once data is loaded into Schematic, it is processed to map onto objects within the solution and made available for rule-based targeting.

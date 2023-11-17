@@ -62,13 +62,18 @@
       "pages": [
         "sdks/concepts",
         "sdks/javascript",
-        "sdks/ruby"
+        "sdks/ruby",
+        "sdks/typescript-node",
+        "sdks/go"
       ]
     },
     {
       "group": "Integrations",
       "pages": [
-        "integrations/stripe"
+        "integrations/stripe",
+        "integrations/salesforce",
+        "integrations/hubspot",
+        "integrations/segment"
       ]
     },
     {
@@ -146,7 +151,7 @@
       ]
     },
     {
-      "group": "features",
+      "group": "Features",
       "pages": [
         "api-reference/features/list-features",
         "api-reference/features/create-feature",
@@ -156,7 +161,7 @@
       ]
     },
     {
-      "group": "flags",
+      "group": "Flags",
       "pages": [
         "api-reference/features/list-flag-checks",
         "api-reference/features/latest-flag-checks",
