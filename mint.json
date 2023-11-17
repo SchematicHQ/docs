@@ -54,7 +54,10 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart"
+        "quickstart",
+        "availability",
+        "observability",
+        "security"
       ]
     },
     {
