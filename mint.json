@@ -146,7 +146,7 @@
       ]
     },
     {
-      "group": "features",
+      "group": "Features",
       "pages": [
         "api-reference/features/list-features",
         "api-reference/features/create-feature",
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "group": "flags",
+      "group": "Flags",
       "pages": [
         "api-reference/features/list-flag-checks",
         "api-reference/features/latest-flag-checks",
