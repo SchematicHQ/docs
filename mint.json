@@ -62,13 +62,18 @@
       "pages": [
         "sdks/concepts",
         "sdks/javascript",
-        "sdks/ruby"
+        "sdks/ruby",
+        "sdks/typescript-node",
+        "sdks/go"
       ]
     },
     {
       "group": "Integrations",
       "pages": [
-        "integrations/stripe"
+        "integrations/stripe",
+        "integrations/salesforce",
+        "integrations/hubspot",
+        "integrations/segment"
       ]
     },
     {
