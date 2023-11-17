@@ -426,10 +426,10 @@ components:
                     type: string
                 skip_webhooks:
                     type: boolean
+                    nullable: true
             required:
                 - name
                 - environment_type
-                - skip_webhooks
             title: CreateEnvironmentRequestBody
         CreateEventRequestBody:
             type: object
@@ -515,6 +515,7 @@ components:
                     type: string
                 skip_webhooks:
                     type: boolean
+                    nullable: true
                 trait_id:
                     type: string
                     nullable: true
@@ -522,7 +523,6 @@ components:
                 - description
                 - feature_type
                 - name
-                - skip_webhooks
             title: CreateFeatureRequestBody
         CreateFlagRequestBody:
             type: object
@@ -681,9 +681,9 @@ components:
                     type: string
                 skip_webhooks:
                     type: boolean
+                    nullable: true
             required:
                 - name
-                - skip_webhooks
             title: CreatePlanRequestBody
         DeleteResponse:
             type: object
@@ -1378,11 +1378,10 @@ components:
                     nullable: true
                 skip_webhooks:
                     type: boolean
+                    nullable: true
                 trait_id:
                     type: string
                     nullable: true
-            required:
-                - skip_webhooks
             title: UpdateFeatureRequestBody
         UpdatePlanRequestBody:
             type: object
@@ -1391,9 +1390,9 @@ components:
                     type: string
                 skip_webhooks:
                     type: boolean
+                    nullable: true
             required:
                 - name
-                - skip_webhooks
             title: UpdatePlanRequestBody
         UpsertBillingPeriodRequestBody:
             type: object
@@ -1428,12 +1427,12 @@ components:
                     nullable: true
                 skip_webhooks:
                     type: boolean
+                    nullable: true
                 traits:
                     type: object
                     description: A map of trait names to trait values
             required:
                 - keys
-                - skip_webhooks
             title: UpsertCompanyRequestBody
         UpsertUserRequestBody:
             type: object
@@ -1456,12 +1455,12 @@ components:
                     nullable: true
                 skip_webhooks:
                     type: boolean
+                    nullable: true
                 traits:
                     type: object
                     description: A map of trait names to trait values
             required:
                 - keys
-                - skip_webhooks
                 - company
             title: UpsertUserRequestBody
         UpsertUserSubRequestBody:
@@ -1482,12 +1481,12 @@ components:
                     nullable: true
                 skip_webhooks:
                     type: boolean
+                    nullable: true
                 traits:
                     type: object
                     description: A map of trait names to trait values
             required:
                 - keys
-                - skip_webhooks
             title: UpsertUserSubRequestBody
         UserDetailResponseData:
             type: object
