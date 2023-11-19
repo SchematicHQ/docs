@@ -92,8 +92,7 @@
         "api-reference/accounts/create-api-key",
         "api-reference/accounts/get-api-key",
         "api-reference/accounts/update-api-key",
-        "api-reference/accounts/delete-api-key",
-        "api-reference/accounts/count-api-keys"
+        "api-reference/accounts/delete-api-key"
       ]
     },
     {
@@ -108,7 +107,6 @@
       "group": "Plans",
       "pages": [
         "api-reference/plans/upsert-billing-period",
-        "api-reference/plans/sync-company-plans",
         "api-reference/plans/list-plans",
         "api-reference/plans/create-plan",
         "api-reference/plans/get-plan",
@@ -146,11 +144,9 @@
       "pages": [
         "api-reference/events/list-event-types",
         "api-reference/events/get-event-type",
-        "api-reference/events/count-event-types",
         "api-reference/events/list-events",
         "api-reference/events/create-event",
-        "api-reference/events/get-event",
-        "api-reference/events/count-events"
+        "api-reference/events/get-event"
       ]
     },
     {
@@ -169,7 +165,6 @@
         "api-reference/features/list-flag-checks",
         "api-reference/features/latest-flag-checks",
         "api-reference/features/list-flag-values",
-        "api-reference/features/count-flag-values",
         "api-reference/features/list-flags",
         "api-reference/features/create-flag",
         "api-reference/features/get-flag",
