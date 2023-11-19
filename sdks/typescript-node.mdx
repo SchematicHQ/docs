@@ -5,12 +5,48 @@ description: ""
 
 ### Installation
 
+Request access to the [NodeJS client](https://github.com/schematichq/schematic-typescript-node) by sending the Schematic team a note in Slack or by emailing `support@schematichq.com`.
+
+Once you have been added to the private repo, set up an .npmrc entry for the private package in your app:
+
+```
+@schematichq:registry=https://npm.pkg.github.com
+```
+
+Then, install using NPM or Yarn:
+
+```bash
+npm install @schematichq/schematic-typescript-node
+yarn add @schematichq/schematic-typescript-node
+```
+
 ...
 
 ### Initialization
 
-...
+Initialize a client with an API key secret:
+
+```typescript
+import * as schematic from "@schematichq/schematic-typescript-node";
+
+const apiKey = "sch_dev_yourapikey"
+const client = schematic.init(apiKey)
+```
 
 ### Usage example
 
-...
+Once the SDK is initialized, you may submit requests. Below is an example of upserting a Company (creating or updating it by its keys).
+
+```typescript
+client.Companies.createCompany({
+  upsertCompanyRequestBody: {
+    name: "Company Name",
+    keys: {
+      id: "company-id",
+    },
+    traits: {
+      status: "active",
+    },
+  },
+});
+```
