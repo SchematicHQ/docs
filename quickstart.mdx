@@ -180,22 +180,6 @@ Navigate to the plans tab and click “Create plan”. Add name, a description, 
   src="/images/quickstart_plans_1.png"
 />
 
-2. **Connect your plan to a Stripe product**
-
-For this step, you’ll need to [connect Stripe](https://app.schematichq.com/settings). Connecting Stripe will allow Schematic to sync subscription data to automatically assign plan membership, as well as fill in traits like revenue at the plan and company levels.
-
-Once Stripe is connected, navigate to the plan you’ve just created and click “Edit plan”. In the modal, click “Integrate”, and pick the appropriate Stripe product that corresponds to the Schematic plan. Click “Save”.
-
-<img
-  src="/images/quickstart_plans_2.png"
-/>
-
-<img
-  src="/images/quickstart_plans_3.png"
-/>
-
-<Info>Schematic associates Stripe data with customers based on the `stripe_customer_id` key. When creating or updating companies from your application, make sure to pass the corresponding `stripe_customer_id` in the `keys` object. If you don’t, subscription data will not be associated with Schematic companies, and those companies will not be associated with the appropriate Schematic plans.</Info>
-
 ## Logging events (and viewing them)
 
 Let’s start sending Schematic events from your application.
