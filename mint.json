@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Schematic",
+  "name": "Schematic Documentation",
   "openapi": [
     "/openapi.yaml"
   ],
