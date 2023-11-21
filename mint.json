@@ -9,6 +9,7 @@
     "light": "logo/black-text.png"
   },
   "favicon": "/favicon.png",
+  "feedback.thumbsRating": true,
   "colors": {
     "primary": "#DB6769",
     "light": "#DE8284",
