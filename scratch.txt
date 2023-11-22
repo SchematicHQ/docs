@@ -4,7 +4,7 @@
   width="560"
   height="400"
   src="https://www.loom.com/embed/bbb09e97db2c45e68307dbde0aa77a42?sid=439034db-a5c1-42c8-a110-69341413bd35"
-  title="YouTube video player"
+  title="Loom video player"
   frameborder="0"
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
   allowFullScreen
