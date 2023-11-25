@@ -118,13 +118,13 @@ The next step is to add your features to Schematic. Let’s add an example, Sear
 
 1. **Create a new feature in the Schematic app**
 
-On the main [dashboard](https://app.schematichq.com/features), click “Create”. In the modal, add a name, description, and lifecycle phase. It’s important to add a complete description so that other users know exactly what this feature is related to in your application.
+On the main [dashboard](https://app.schematichq.com/features), click “Create”. In the modal, add a name, description, and pick the feature type (boolean, event-based, or trait-based). It’s important to add a complete description so that other users know exactly what this feature is tied to in your application.
 
 <img
   src="/images/quickstart_features_1.png"
 />
 
-2. **Add a key to the feature**
+2. **Define a key flag**
 
 You’ll use this key within your application to reference this feature.
 
@@ -132,17 +132,23 @@ You’ll use this key within your application to reference this feature.
   src="/images/quickstart_features_2.png"
 />
 
-3. **Attach an event to the feature**
+3. **Attach a trait or event to the feature**
 
-Optionally, add an event to the feature to track usage and to use in rules that enforce feature limits.
+Depending on the feature type, add an event or trait to track usage and/or use while metering the feature. In this case, we'll add a `query` event.
 
 <img
   src="/images/quickstart_features_3.png"
 />
 
-4. **Define rules**
+4. **View the underlying flag to define rules**
 
-Once you’ve finished creating the feature, click “Add a new rule” and use the available criteria to build targeting rules. In this example, we’re going to use the Company criteria to target [the company we created earlier](/quickstart#creating-companies-and-users), “Example Company”. Once you’ve set up the rule, click “Review” at the top of your screen to verify you’d like the rule to be added and “Save” in the modal.
+Once you’ve finished creating the feature, navigate to the Flag tab and click the menu to "View" the flag.
+
+<img
+  src="/images/quickstart_features_6.png"
+/>
+
+Within the flag view, click “Add a new rule” and use the available criteria to build targeting rules. In this example, we’re going to use the Company criteria to target [the company we created earlier](/quickstart#creating-companies-and-users), “Example Company”. Once you’ve set up the rule, click “Review” at the top of your screen to verify you’d like the rule to be added and “Save” in the modal.
 
 Now when checking whether this feature is available to “Example Company” within your application, Schematic will return True.
 
@@ -166,7 +172,7 @@ await schematic.checkFlag("search-queries", { company: { companyId: "FqaaszD" } 
   src="/images/quickstart_features_5.png"
 />
 
-<Info>On the client-side, checkFlag is an asynchronous Javascript function that returns a promise.</Info>
+<Info>On the client-side, checkFlag is an asynchronous Javascript function that returns a promise. Schematic supports several SDKs. Check them out [here](/introduction#sdks).</Info>
 
 ## Create a plan
 
