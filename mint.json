@@ -8,6 +8,11 @@
     "dark": "logo/white-text.png",
     "light": "logo/black-text.png"
   },
+  "analytics": {
+    "gtm": {
+        "tagId": "GTM-T9HDDC54"
+    }
+  },
   "favicon": "/favicon.png",
   "feedback.thumbsRating": true,
   "colors": {
