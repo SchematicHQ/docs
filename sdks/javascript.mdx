@@ -66,3 +66,8 @@ schematic.track({
 ```
 
 The Javasript SDK references companies or users by their Schematic ID using the `id` key or by any key you have defined and passed to Schematic previously.
+
+### React Native
+
+This library uses [uuid](https://www.npmjs.com/package/uuid). In order for this to work in a React native context, you must also provide a [shim](https://github.com/LinusU/react-native-get-random-values#readme) for crypto.getRandomValues as described in the [uuid documentation](https://www.npmjs.com/package/uuid#react-native--expo).
+
