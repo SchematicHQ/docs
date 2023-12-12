@@ -67,14 +67,21 @@
       ]
     },
     {
-      "group": "SDKs",
+      "group": "Developer Resources",
       "pages": [
-        "sdks/concepts",
-        "sdks/javascript",
-        "sdks/ruby",
-        "sdks/typescript-node",
-        "sdks/go"
-      ]
+              "developer_resources/concepts",
+              "developer_resources/environments",
+              {
+                "group": "SDKs",
+                "pages": [
+                  "developer_resources/sdks/javascript",
+                  "developer_resources/sdks/ruby",
+                  "developer_resources/sdks/typescript-node",
+                  "developer_resources/sdks/go"
+                ]
+              }
+
+              ]
     },
     {
       "group": "Integrations",
