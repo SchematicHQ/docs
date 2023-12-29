@@ -40,7 +40,7 @@ Finally, we need to add a Permission Set Mapping to the principal. Navigate back
   src="/images/salesforce_integration_3.png"
 />
 
-Under External Credential Principal Access, select Edit. Find the principal you created under Available External Credential Principals and add so that it is under the Enabled External Credential Principals.
+Under External Credential Principal Access, select Edit. Find the principal we created under Available External Credential Principals and add so that it is under the Enabled External Credential Principals.
 
 ### Create a named credential
 
@@ -58,7 +58,7 @@ Create a new namaed credential with a label such as ```schematic``` (mirror the 
 
 In the External Credentials dropdown select the credentials we created earlier (the certificate is not necessary).
 
-We will need to generate an authorization header to include your API key from Schematic, so ensure that is checked.
+We will need to generate an authorization header to include our API key from Schematic, so ensure that is checked.
 
 Save the named credential.
 
@@ -69,12 +69,14 @@ Once it is created, ensure the options look correct.
 />
 
 Scroll down to Custom Headers and select New. Define two key value pairs:
-* X-Schematic-Api-Key ... ```your-api-key```
+* X-Schematic-Api-Key ... ```our-api-key```
 * Content-Type ... application/json
 
 <img
   src="/images/salesforce_integration_6.png"
 />
+
+If you don't already have a Schematic API key, [create one](/quickstart#create-an-api-key)
 
 ## Build a Flow
 
@@ -100,7 +102,7 @@ Add an Action Element, then select HTTP Callout. Name the action and select the 
   src="/images/salesforce_integration_8.png"
 />
 
-On the next screen in the wizard, label the action as PostCompany with a method of POST (if we were retrieving information from Schematic, we would set the method to GET). Add a short description if you desire.
+On the next screen in the wizard, label the action as PostCompany with a method of POST (if we were retrieving information from Schematic, we would set the method to GET). Add a short description if desired.
 
 <img
   src="/images/salesforce_integration_9.png"
@@ -166,7 +168,7 @@ Click on Sample Response and copy the response [here](/api-reference/companies/c
 
 Click Review and confirm the Data Structure looks correct.
 
-Save the HTTP Callout. In the New Action Modal, you will be prompted to add a label and API name, then set the request body.
+Save the HTTP Callout. In the New Action Modal, we will be prompted to add a label and API name, then set the request body.
 
 In the dropdown click "New Resource" and name the resource based on the auto-selected Apex Class. The Data Type and Apex Class should be grayed out like below.
 
@@ -178,7 +180,7 @@ Click Done.
 
 ### Assign variables
 
-Add an Assignment element prior to the HTTP Callout in your flow to assign values to the variables from your sample request. Map each variable from the sample request.
+Add an Assignment element prior to the HTTP Callout in the flow to assign values to the variables from the sample request. Map each variable from the sample request.
 
 <img
   src="/images/salesforce_integration_12a.png"
@@ -188,11 +190,11 @@ Add an Assignment element prior to the HTTP Callout in your flow to assign value
   src="/images/salesforce_integration_12.png"
 />
 
-In this example, we'll use static values, but you can also reference objects within Salesforce to assign values dynamically if you retreive them prior to assignment in the Flow Builder. 
+In this example, we'll use static values, but we can also reference objects within Salesforce to assign values dynamically if we retreive them prior to assignment in the Flow Builder. 
 
 ### Run the flow
 
-Add a Screen element after the HTTP Callout action in your Flow to observe output.
+Add a Screen element after the HTTP Callout action in the Flow to observe output.
 
 In the Screen element, select Display text, then add the output from the HTTP callout.
 
@@ -205,3 +207,5 @@ After saving the Flow, click Run. Salesforce will open a new tab with the API re
 <img
   src="/images/salesforce_integration_14.png"
 />
+
+If the API call is working as expected, we can now customize the flow in a variety of ways to retrieve dynamic values from Salesforce, to trigger based on activity (e.g. a closed won deal), or to generate requests against Schematic endpoints.
