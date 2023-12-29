@@ -168,7 +168,7 @@ Click Review and confirm the Data Structure looks correct.
 
 Save the HTTP Callout. In the New Action Modal, you will be prompted to add a label and API name, then set the request body.
 
-In the dropdown click "New Resource" and name the resource similar to the screenshot below.
+In the dropdown click "New Resource" and name the resource based on the auto-selected Apex Class. The Data Type and Apex Class should be grayed out like below.
 
 <img
   src="/images/salesforce_integration_11.png"
@@ -181,6 +181,10 @@ Click Done.
 Add an Assignment element prior to the HTTP Callout in your flow to assign values to the variables from your sample request. Map each variable from the sample request.
 
 <img
+  src="/images/salesforce_integration_12a.png"
+/>
+
+<img
   src="/images/salesforce_integration_12.png"
 />
 
@@ -188,7 +192,7 @@ In this example, we'll use static values, but you can also reference objects wit
 
 ### Run the flow
 
-Add a Screen element after the HTTP Callout action to observe output.
+Add a Screen element after the HTTP Callout action in your Flow to observe output.
 
 In the Screen element, select Display text, then add the output from the HTTP callout.
 
