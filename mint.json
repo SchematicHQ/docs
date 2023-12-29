@@ -86,7 +86,6 @@
     {
       "group": "Integrations",
       "pages": [
-        "integrations/stripe",
         "integrations/salesforce",
         "integrations/hubspot",
         "integrations/segment"
