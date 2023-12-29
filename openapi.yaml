@@ -103,6 +103,81 @@ components:
                 - updated_at
                 - secret
             title: ApiKeyCreateResponseData
+        ApiKeyRequestListResponseData:
+            type: object
+            properties:
+                api_key_id:
+                    type: string
+                ended_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                environment_id:
+                    type: string
+                    nullable: true
+                id:
+                    type: string
+                method:
+                    type: string
+                req_body:
+                    type: string
+                    nullable: true
+                resp_code:
+                    type: integer
+                    nullable: true
+                started_at:
+                    type: string
+                    format: date-time
+                url:
+                    type: string
+            required:
+                - id
+                - api_key_id
+                - url
+                - method
+                - started_at
+            title: ApiKeyRequestListResponseData
+        ApiKeyRequestResponseData:
+            type: object
+            description: The returned resource
+            properties:
+                api_key_id:
+                    type: string
+                ended_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                environment_id:
+                    type: string
+                    nullable: true
+                id:
+                    type: string
+                method:
+                    type: string
+                req_body:
+                    type: string
+                    nullable: true
+                resp_body:
+                    type: string
+                    nullable: true
+                resp_code:
+                    type: integer
+                    nullable: true
+                started_at:
+                    type: string
+                    format: date-time
+                url:
+                    type: string
+                user_agent:
+                    type: string
+                    nullable: true
+            required:
+                - id
+                - api_key_id
+                - url
+                - method
+                - started_at
+            title: ApiKeyRequestResponseData
         ApiKeyResponseData:
             type: object
             description: The updated resource
@@ -138,6 +213,40 @@ components:
                 - created_at
                 - updated_at
             title: ApiKeyResponseData
+        AudienceRequestBody:
+            type: object
+            properties:
+                condition_groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionGroupRequestBody'
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionRequestBody'
+                dir:
+                    type: string
+                    description: Order direction
+                    nullable: true
+                limit:
+                    type: integer
+                    description: Page limit (default 100)
+                    nullable: true
+                offset:
+                    type: integer
+                    description: Page offset (default 0)
+                    nullable: true
+                order:
+                    type: string
+                    description: Order by column
+                    nullable: true
+                q:
+                    type: string
+                    nullable: true
+            required:
+                - conditions
+                - condition_groups
+            title: AudienceRequestBody
         BillingPeriodResponseData:
             type: object
             description: The returned resource
@@ -230,22 +339,6 @@ components:
                 - reason
                 - value
             title: CheckFlagResponseData
-        CheckFlagsRequestBody:
-            type: object
-            properties:
-                company:
-                    type: object
-                flags:
-                    type: array
-                    items:
-                        type: string
-                user:
-                    type: object
-                    nullable: true
-            required:
-                - company
-                - flags
-            title: CheckFlagsRequestBody
         CheckFlagsResponseData:
             type: object
             description: The created resource
@@ -259,7 +352,6 @@ components:
             title: CheckFlagsResponseData
         CompanyDetailResponseData:
             type: object
-            description: The returned resource
             properties:
                 created_at:
                     type: string
@@ -399,10 +491,13 @@ components:
             title: CompanyResponseData
         CountResponse:
             type: object
+            description: The created resource
             properties:
                 count:
                     type: integer
-                    description: The number of resources
+            required:
+                - count
+            title: CountResponse
         CreateApiKeyRequestBody:
             type: object
             properties:
@@ -544,6 +639,9 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/CreateOrUpdateRuleRequestBody'
+                skip_webhooks:
+                    type: boolean
+                    nullable: true
             required:
                 - default_value
                 - description
@@ -552,28 +650,25 @@ components:
                 - name
                 - rules
             title: CreateFlagRequestBody
-        CreateOrUpdateCompanyPlanRequestBody:
+        CreateOrUpdateConditionGroupRequestBody:
             type: object
             properties:
-                company_id:
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionRequestBody'
+                flag_id:
                     type: string
-                ended_at:
-                    type: string
-                    format: date-time
                     nullable: true
                 id:
                     type: string
                     nullable: true
                 plan_id:
                     type: string
-                started_at:
-                    type: string
-                    format: date-time
                     nullable: true
             required:
-                - company_id
-                - plan_id
-            title: CreateOrUpdateCompanyPlanRequestBody
+                - conditions
+            title: CreateOrUpdateConditionGroupRequestBody
         CreateOrUpdateConditionRequestBody:
             type: object
             properties:
@@ -641,6 +736,9 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/CreateOrUpdateRuleRequestBody'
+                skip_webhooks:
+                    type: boolean
+                    nullable: true
             required:
                 - default_value
                 - description
@@ -652,6 +750,10 @@ components:
         CreateOrUpdateRuleRequestBody:
             type: object
             properties:
+                condition_groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionGroupRequestBody'
                 conditions:
                     type: array
                     items:
@@ -666,13 +768,17 @@ components:
                 priority_group:
                     type: integer
                     nullable: true
+                skip_webhooks:
+                    type: boolean
+                    nullable: true
                 value:
                     type: boolean
             required:
+                - condition_groups
+                - conditions
                 - name
                 - priority
                 - value
-                - conditions
             title: CreateOrUpdateRuleRequestBody
         CreatePlanRequestBody:
             type: object
@@ -685,6 +791,42 @@ components:
             required:
                 - name
             title: CreatePlanRequestBody
+        CreateRuleRequestBody:
+            type: object
+            properties:
+                condition_groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionGroupRequestBody'
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionRequestBody'
+                flag_id:
+                    type: string
+                    nullable: true
+                name:
+                    type: string
+                plan_id:
+                    type: string
+                    nullable: true
+                priority:
+                    type: integer
+                priority_group:
+                    type: integer
+                    nullable: true
+                skip_webhooks:
+                    type: boolean
+                    nullable: true
+                value:
+                    type: boolean
+            required:
+                - condition_groups
+                - conditions
+                - name
+                - priority
+                - value
+            title: CreateRuleRequestBody
         DeleteResponse:
             type: object
             properties:
@@ -809,7 +951,7 @@ components:
             title: EnvironmentDetailResponseData
         EnvironmentResponseData:
             type: object
-            description: The updated resource
+            description: The returned resource
             properties:
                 created_at:
                     type: string
@@ -989,6 +1131,8 @@ components:
         FlagCheckLogResponseData:
             type: object
             properties:
+                check_status:
+                    type: string
                 company_id:
                     type: string
                     nullable: true
@@ -1025,6 +1169,7 @@ components:
                 value:
                     type: boolean
             required:
+                - check_status
                 - created_at
                 - environment_id
                 - flag_key
@@ -1060,7 +1205,7 @@ components:
                 rules:
                     type: array
                     items:
-                        $ref: '#/components/schemas/FlagRuleDetailResponseData'
+                        $ref: '#/components/schemas/RuleDetailResponseData'
                 updated_at:
                     type: string
                     format: date-time
@@ -1109,79 +1254,6 @@ components:
                 - name
                 - updated_at
             title: FlagResponseData
-        FlagRuleDetailResponseData:
-            type: object
-            properties:
-                conditions:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/RuleConditionResponseData'
-                created_at:
-                    type: string
-                    format: date-time
-                environment_id:
-                    type: string
-                flag_id:
-                    type: string
-                id:
-                    type: string
-                name:
-                    type: string
-                priority:
-                    type: integer
-                priority_group:
-                    type: integer
-                    nullable: true
-                updated_at:
-                    type: string
-                    format: date-time
-                value:
-                    type: boolean
-            required:
-                - id
-                - environment_id
-                - flag_id
-                - priority
-                - name
-                - value
-                - created_at
-                - updated_at
-                - conditions
-            title: FlagRuleDetailResponseData
-        FlagRuleResponseData:
-            type: object
-            properties:
-                created_at:
-                    type: string
-                    format: date-time
-                environment_id:
-                    type: string
-                flag_id:
-                    type: string
-                id:
-                    type: string
-                name:
-                    type: string
-                priority:
-                    type: integer
-                priority_group:
-                    type: integer
-                    nullable: true
-                updated_at:
-                    type: string
-                    format: date-time
-                value:
-                    type: boolean
-            required:
-                - id
-                - environment_id
-                - flag_id
-                - priority
-                - name
-                - value
-                - created_at
-                - updated_at
-            title: FlagRuleResponseData
         GetOrCreateCompanyMembershipRequestBody:
             type: object
             properties:
@@ -1221,6 +1293,26 @@ components:
                 - value
                 - created_at
             title: MetricCountsHourlyResponseData
+        PaginationFilter:
+            type: object
+            properties:
+                dir:
+                    type: string
+                    description: Order direction
+                    nullable: true
+                limit:
+                    type: integer
+                    description: Page limit (default 100)
+                    nullable: true
+                offset:
+                    type: integer
+                    description: Page offset (default 0)
+                    nullable: true
+                order:
+                    type: string
+                    description: Order by column
+                    nullable: true
+            title: PaginationFilter
         PlanResponseData:
             type: object
             description: The updated resource
@@ -1241,9 +1333,76 @@ components:
                 - created_at
                 - updated_at
             title: PlanResponseData
+        RuleConditionGroupDetailResponseData:
+            type: object
+            properties:
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RuleConditionResponseData'
+                created_at:
+                    type: string
+                    format: date-time
+                environment_id:
+                    type: string
+                flag_id:
+                    type: string
+                    nullable: true
+                id:
+                    type: string
+                plan_id:
+                    type: string
+                    nullable: true
+                rule_id:
+                    type: string
+                updated_at:
+                    type: string
+                    format: date-time
+            required:
+                - id
+                - environment_id
+                - rule_id
+                - created_at
+                - updated_at
+                - conditions
+            title: RuleConditionGroupDetailResponseData
+        RuleConditionGroupResponseData:
+            type: object
+            properties:
+                created_at:
+                    type: string
+                    format: date-time
+                environment_id:
+                    type: string
+                flag_id:
+                    type: string
+                    nullable: true
+                id:
+                    type: string
+                plan_id:
+                    type: string
+                    nullable: true
+                rule_id:
+                    type: string
+                updated_at:
+                    type: string
+                    format: date-time
+            required:
+                - id
+                - environment_id
+                - rule_id
+                - created_at
+                - updated_at
+            title: RuleConditionGroupResponseData
         RuleConditionResponseData:
             type: object
             properties:
+                comparison_trait_id:
+                    type: string
+                    nullable: true
+                condition_group_id:
+                    type: string
+                    nullable: true
                 condition_type:
                     type: string
                 created_at:
@@ -1256,6 +1415,7 @@ components:
                     nullable: true
                 flag_id:
                     type: string
+                    nullable: true
                 id:
                     type: string
                 metric_period:
@@ -1265,6 +1425,9 @@ components:
                     type: integer
                 operator:
                     type: string
+                plan_id:
+                    type: string
+                    nullable: true
                 resource_ids:
                     type: array
                     items:
@@ -1285,43 +1448,100 @@ components:
             required:
                 - id
                 - environment_id
-                - flag_id
                 - rule_id
                 - condition_type
                 - operator
+                - created_at
+                - updated_at
                 - resource_ids
                 - metric_value
                 - trait_value
-                - created_at
-                - updated_at
             title: RuleConditionResponseData
-        SyncCompanyPlansRequestBody:
+        RuleDetailResponseData:
             type: object
+            description: The updated resource
             properties:
-                company_id:
+                condition_groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RuleConditionGroupDetailResponseData'
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RuleConditionResponseData'
+                created_at:
+                    type: string
+                    format: date-time
+                environment_id:
+                    type: string
+                flag_id:
                     type: string
                     nullable: true
+                id:
+                    type: string
+                name:
+                    type: string
                 plan_id:
                     type: string
                     nullable: true
-                plans:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/CreateOrUpdateCompanyPlanRequestBody'
+                priority:
+                    type: integer
+                priority_group:
+                    type: integer
+                    nullable: true
+                updated_at:
+                    type: string
+                    format: date-time
+                value:
+                    type: boolean
             required:
-                - plans
-            title: SyncCompanyPlansRequestBody
-        SyncCompanyPlansResponseData:
+                - id
+                - environment_id
+                - priority
+                - name
+                - value
+                - created_at
+                - updated_at
+                - conditions
+                - condition_groups
+            title: RuleDetailResponseData
+        RuleResponseData:
             type: object
-            description: The created resource
             properties:
-                plans:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/CompanyPlanResponseData'
+                created_at:
+                    type: string
+                    format: date-time
+                environment_id:
+                    type: string
+                flag_id:
+                    type: string
+                    nullable: true
+                id:
+                    type: string
+                name:
+                    type: string
+                plan_id:
+                    type: string
+                    nullable: true
+                priority:
+                    type: integer
+                priority_group:
+                    type: integer
+                    nullable: true
+                updated_at:
+                    type: string
+                    format: date-time
+                value:
+                    type: boolean
             required:
-                - plans
-            title: SyncCompanyPlansResponseData
+                - id
+                - environment_id
+                - priority
+                - name
+                - value
+                - created_at
+                - updated_at
+            title: RuleResponseData
         UpdateApiKeyRequestBody:
             type: object
             properties:
@@ -1332,6 +1552,24 @@ components:
                     type: string
                     nullable: true
             title: UpdateApiKeyRequestBody
+        UpdateAudienceRequestBody:
+            type: object
+            properties:
+                condition_groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionGroupRequestBody'
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionRequestBody'
+                skip_webhooks:
+                    type: boolean
+                    nullable: true
+            required:
+                - conditions
+                - condition_groups
+            title: UpdateAudienceRequestBody
         UpdateEntityTraitDefinitionRequestBody:
             type: object
             properties:
@@ -1394,6 +1632,36 @@ components:
             required:
                 - name
             title: UpdatePlanRequestBody
+        UpdateRuleRequestBody:
+            type: object
+            properties:
+                condition_groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionGroupRequestBody'
+                conditions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateConditionRequestBody'
+                name:
+                    type: string
+                priority:
+                    type: integer
+                priority_group:
+                    type: integer
+                    nullable: true
+                skip_webhooks:
+                    type: boolean
+                    nullable: true
+                value:
+                    type: boolean
+            required:
+                - condition_groups
+                - conditions
+                - name
+                - priority
+                - value
+            title: UpdateRuleRequestBody
         UpsertBillingPeriodRequestBody:
             type: object
             properties:
@@ -1490,7 +1758,6 @@ components:
             title: UpsertUserSubRequestBody
         UserDetailResponseData:
             type: object
-            description: The returned resource
             properties:
                 company_memberships:
                     type: array
@@ -1922,6 +2189,408 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
+    /api-requests:
+        get:
+            operationId: listApiRequests
+            summary: List api requests
+            tags:
+                - accounts
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: q
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  required: false
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  required: false
+                  schema:
+                    type: integer
+                - name: order
+                  in: query
+                  description: Order by column
+                  required: false
+                  schema:
+                    type: string
+                - name: dir
+                  in: query
+                  description: Order direction
+                  required: false
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        description: The returned resources
+                                        items:
+                                            $ref: '#/components/schemas/ApiKeyRequestListResponseData'
+                                        title: ListApiRequestsResponseData
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            dir:
+                                                type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
+                                            order:
+                                                type: string
+                                            q:
+                                                type: string
+                                        title: ListApiRequestsParams
+                                required:
+                                    - data
+                                    - params
+                                title: ListApiRequestsResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /api-requests/{api_request_id}:
+        get:
+            operationId: getApiRequest
+            summary: Get api request
+            tags:
+                - accounts
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: api_request_id
+                  in: path
+                  description: api_request_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/ApiKeyRequestResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: GetApiRequestParams
+                                required:
+                                    - data
+                                    - params
+                                title: GetApiRequestResponse
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /api-requests/count:
+        get:
+            operationId: countApiRequests
+            summary: Count api requests
+            tags:
+                - accounts
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: q
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  required: false
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  required: false
+                  schema:
+                    type: integer
+                - name: order
+                  in: query
+                  description: Order by column
+                  required: false
+                  schema:
+                    type: string
+                - name: dir
+                  in: query
+                  description: Order direction
+                  required: false
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/CountResponse'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            dir:
+                                                type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
+                                            order:
+                                                type: string
+                                            q:
+                                                type: string
+                                        title: CountApiRequestsParams
+                                required:
+                                    - data
+                                    - params
+                                title: CountApiRequestsResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /audience/count-companies:
+        post:
+            operationId: countCompaniesAudience
+            summary: Count Companies audience
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AudienceRequestBody'
+                required: true
+            responses:
+                "201":
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/CountResponse'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: CountCompaniesAudienceParams
+                                required:
+                                    - data
+                                    - params
+                                title: CountCompaniesAudienceResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /audience/count-users:
+        post:
+            operationId: countUsersAudience
+            summary: Count Users audience
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AudienceRequestBody'
+                required: true
+            responses:
+                "201":
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/CountResponse'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: CountUsersAudienceParams
+                                required:
+                                    - data
+                                    - params
+                                title: CountUsersAudienceResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /audience/get-companies:
+        post:
+            operationId: getCompaniesAudience
+            summary: Get Companies audience
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AudienceRequestBody'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        description: The returned resources
+                                        items:
+                                            $ref: '#/components/schemas/CompanyDetailResponseData'
+                                        title: GetCompaniesAudienceResponseData
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: GetCompaniesAudienceParams
+                                required:
+                                    - data
+                                    - params
+                                title: GetCompaniesAudienceResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /audience/get-users:
+        post:
+            operationId: getUsersAudience
+            summary: Get Users audience
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AudienceRequestBody'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        description: The returned resources
+                                        items:
+                                            $ref: '#/components/schemas/UserDetailResponseData'
+                                        title: GetUsersAudienceResponseData
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: GetUsersAudienceParams
+                                required:
+                                    - data
+                                    - params
+                                title: GetUsersAudienceResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
     /billing-periods/{key}/upsert:
         post:
             operationId: upsertBillingPeriod
@@ -2335,10 +3004,10 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
-    /company-plans/sync:
-        post:
-            operationId: syncCompanyPlans
-            summary: Sync company plans
+    /company-plans:
+        get:
+            operationId: listCompanyPlans
+            summary: List company plans
             tags:
                 - plans
             parameters:
@@ -2349,30 +3018,82 @@ paths:
                   schema:
                     type: string
                     title: EnvironmentIDParam
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/SyncCompanyPlansRequestBody'
-                required: true
+                - name: company_id
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: plan_id
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: active
+                  in: query
+                  required: false
+                  schema:
+                    type: boolean
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  required: false
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  required: false
+                  schema:
+                    type: integer
+                - name: order
+                  in: query
+                  description: Order by column
+                  required: false
+                  schema:
+                    type: string
+                - name: dir
+                  in: query
+                  description: Order direction
+                  required: false
+                  schema:
+                    type: string
             responses:
-                "201":
-                    description: Created
+                "200":
+                    description: OK
                     content:
                         application/json:
                             schema:
                                 type: object
                                 properties:
                                     data:
-                                        $ref: '#/components/schemas/SyncCompanyPlansResponseData'
+                                        type: array
+                                        description: The returned resources
+                                        items:
+                                            $ref: '#/components/schemas/CompanyPlanResponseData'
+                                        title: ListCompanyPlansResponseData
                                     params:
                                         type: object
                                         description: Input parameters
-                                        title: SyncCompanyPlansParams
+                                        properties:
+                                            active:
+                                                type: boolean
+                                            company_id:
+                                                type: string
+                                            dir:
+                                                type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
+                                            order:
+                                                type: string
+                                            plan_id:
+                                                type: string
+                                        title: ListCompanyPlansParams
                                 required:
                                     - data
                                     - params
-                                title: SyncCompanyPlansResponse
+                                title: ListCompanyPlansResponse
                 "400":
                     $ref: '#/components/responses/BadRequest'
                 "401":
@@ -2482,6 +3203,51 @@ paths:
                 "500":
                     $ref: '#/components/responses/ServerError'
     /environments/{environment_id}:
+        get:
+            operationId: getEnvironment
+            summary: Get environment
+            tags:
+                - accounts
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: environment_id
+                  in: path
+                  description: environment_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/EnvironmentResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: GetEnvironmentParams
+                                required:
+                                    - data
+                                    - params
+                                title: GetEnvironmentResponse
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
         put:
             operationId: updateEnvironment
             summary: Update environment
@@ -3448,6 +4214,143 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
+    /flag-checks/{flag_check_id}:
+        get:
+            operationId: getFlagCheck
+            summary: Get flag check
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: flag_check_id
+                  in: path
+                  description: flag_check_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/FlagCheckLogResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: GetFlagCheckParams
+                                required:
+                                    - data
+                                    - params
+                                title: GetFlagCheckResponse
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /flag-checks/count:
+        get:
+            operationId: countFlagChecks
+            summary: Count flag checks
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: flag_id
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                - name: flag_ids
+                  in: query
+                  required: false
+                  schema:
+                    type: array
+                    items:
+                        type: string
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  required: false
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  required: false
+                  schema:
+                    type: integer
+                - name: order
+                  in: query
+                  description: Order by column
+                  required: false
+                  schema:
+                    type: string
+                - name: dir
+                  in: query
+                  description: Order direction
+                  required: false
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/CountResponse'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            dir:
+                                                type: string
+                                            flag_id:
+                                                type: string
+                                            flag_ids:
+                                                type: array
+                                                items:
+                                                    type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
+                                            order:
+                                                type: string
+                                        title: CountFlagChecksParams
+                                required:
+                                    - data
+                                    - params
+                                title: CountFlagChecksResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
     /flag-checks/latest:
         get:
             operationId: latestFlagChecks
@@ -3768,6 +4671,13 @@ paths:
                   required: false
                   schema:
                     type: string
+                - name: flag_ids
+                  in: query
+                  required: false
+                  schema:
+                    type: array
+                    items:
+                        type: string
                 - name: limit
                   in: query
                   description: Page limit (default 100)
@@ -3814,6 +4724,10 @@ paths:
                                                 type: string
                                             feature_id:
                                                 type: string
+                                            flag_ids:
+                                                type: array
+                                                items:
+                                                    type: string
                                             limit:
                                                 type: integer
                                             offset:
@@ -4092,7 +5006,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/CheckFlagsRequestBody'
+                            $ref: '#/components/schemas/CheckFlagRequestBody'
                 required: true
             responses:
                 "201":
@@ -4359,6 +5273,60 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
+    /plan-audiences/{plan_audience_id}:
+        put:
+            operationId: updatePlanAudience
+            summary: Update plan audience
+            tags:
+                - plans
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: plan_audience_id
+                  in: path
+                  description: plan_audience_id
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateAudienceRequestBody'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/RuleDetailResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: UpdatePlanAudienceParams
+                                required:
+                                    - data
+                                    - params
+                                title: UpdatePlanAudienceResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
     /plans:
         get:
             operationId: listPlans
@@ -4623,6 +5591,151 @@ paths:
                     $ref: '#/components/responses/Unauthorized'
                 "403":
                     $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /rules:
+        post:
+            operationId: createRule
+            summary: Create rule
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateRuleRequestBody'
+                required: true
+            responses:
+                "201":
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/RuleDetailResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: CreateRuleParams
+                                required:
+                                    - data
+                                    - params
+                                title: CreateRuleResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /rules/{rule_id}:
+        get:
+            operationId: getRule
+            summary: Get rule
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: rule_id
+                  in: path
+                  description: rule_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/RuleDetailResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: GetRuleParams
+                                required:
+                                    - data
+                                    - params
+                                title: GetRuleResponse
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+        put:
+            operationId: updateRule
+            summary: Update rule
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  required: false
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: rule_id
+                  in: path
+                  description: rule_id
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateRuleRequestBody'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/RuleDetailResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: UpdateRuleParams
+                                required:
+                                    - data
+                                    - params
+                                title: UpdateRuleResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
                 "500":
                     $ref: '#/components/responses/ServerError'
     /users:
