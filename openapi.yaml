@@ -8,6 +8,19 @@ security:
 servers:
     - url: https://api.schematichq.com
 components:
+    parameters:
+        PaginationLimit:
+            name: limit
+            in: query
+            description: Page limit (default 100)
+            schema:
+                type: integer
+        PaginationOffset:
+            name: offset
+            in: query
+            description: Page offset (default 0)
+            schema:
+                type: integer
     securitySchemes:
         ApiKeyAuth:
             type: apiKey
@@ -224,10 +237,6 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/CreateOrUpdateConditionRequestBody'
-                dir:
-                    type: string
-                    description: Order direction
-                    nullable: true
                 limit:
                     type: integer
                     description: Page limit (default 100)
@@ -235,10 +244,6 @@ components:
                 offset:
                     type: integer
                     description: Page offset (default 0)
-                    nullable: true
-                order:
-                    type: string
-                    description: Order by column
                     nullable: true
                 q:
                     type: string
@@ -951,7 +956,6 @@ components:
             title: EnvironmentDetailResponseData
         EnvironmentResponseData:
             type: object
-            description: The returned resource
             properties:
                 created_at:
                     type: string
@@ -1128,6 +1132,68 @@ components:
                 - created_at
                 - updated_at
             title: FeatureResponseData
+        FlagCheckLogDetailResponseData:
+            type: object
+            properties:
+                check_status:
+                    type: string
+                company:
+                    $ref: '#/components/schemas/CompanyResponseData'
+                company_id:
+                    type: string
+                    nullable: true
+                created_at:
+                    type: string
+                    format: date-time
+                environment:
+                    $ref: '#/components/schemas/EnvironmentResponseData'
+                environment_id:
+                    type: string
+                error:
+                    type: string
+                    nullable: true
+                flag:
+                    $ref: '#/components/schemas/FlagResponseData'
+                flag_id:
+                    type: string
+                    nullable: true
+                flag_key:
+                    type: string
+                id:
+                    type: string
+                reason:
+                    type: string
+                req_company:
+                    type: object
+                req_user:
+                    type: object
+                rule:
+                    $ref: '#/components/schemas/RuleResponseData'
+                rule_id:
+                    type: string
+                    nullable: true
+                updated_at:
+                    type: string
+                    format: date-time
+                user:
+                    $ref: '#/components/schemas/UserResponseData'
+                user_id:
+                    type: string
+                    nullable: true
+                value:
+                    type: boolean
+            required:
+                - check_status
+                - created_at
+                - environment_id
+                - flag_key
+                - id
+                - reason
+                - req_company
+                - req_user
+                - updated_at
+                - value
+            title: FlagCheckLogDetailResponseData
         FlagCheckLogResponseData:
             type: object
             properties:
@@ -1296,10 +1362,6 @@ components:
         PaginationFilter:
             type: object
             properties:
-                dir:
-                    type: string
-                    description: Order direction
-                    nullable: true
                 limit:
                     type: integer
                     description: Page limit (default 100)
@@ -1307,10 +1369,6 @@ components:
                 offset:
                     type: integer
                     description: Page offset (default 0)
-                    nullable: true
-                order:
-                    type: string
-                    description: Order by column
                     nullable: true
             title: PaginationFilter
         PlanResponseData:
@@ -1699,6 +1757,9 @@ components:
                 traits:
                     type: object
                     description: A map of trait names to trait values
+                update_only:
+                    type: boolean
+                    nullable: true
             required:
                 - keys
             title: UpsertCompanyRequestBody
@@ -1727,6 +1788,9 @@ components:
                 traits:
                     type: object
                     description: A map of trait names to trait values
+                update_only:
+                    type: boolean
+                    nullable: true
             required:
                 - keys
                 - company
@@ -1753,6 +1817,9 @@ components:
                 traits:
                     type: object
                     description: A map of trait names to trait values
+                update_only:
+                    type: boolean
+                    nullable: true
             required:
                 - keys
             title: UpsertUserSubRequestBody
@@ -1832,13 +1899,11 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: environment_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: require_environment
@@ -1846,30 +1911,8 @@ paths:
                   required: true
                   schema:
                     type: boolean
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -1888,15 +1931,7 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
                                             environment_id:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             require_environment:
                                                 type: boolean
@@ -1922,7 +1957,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -1968,7 +2002,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2013,7 +2046,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2066,7 +2098,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2112,13 +2143,11 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: environment_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: require_environment
@@ -2126,30 +2155,8 @@ paths:
                   required: true
                   schema:
                     type: boolean
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -2164,15 +2171,7 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
                                             environment_id:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             require_environment:
                                                 type: boolean
@@ -2199,39 +2198,15 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: q
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -2250,14 +2225,6 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
                                             q:
                                                 type: string
                                         title: ListApiRequestsParams
@@ -2283,7 +2250,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2329,39 +2295,15 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: q
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -2376,14 +2318,6 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
                                             q:
                                                 type: string
                                         title: CountApiRequestsParams
@@ -2409,7 +2343,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2455,7 +2388,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2501,7 +2433,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2551,7 +2482,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2601,7 +2531,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2653,41 +2582,17 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: ids
                   in: query
-                  required: false
                   schema:
                     type: array
                     items:
-                        type: integer
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                        type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -2706,18 +2611,10 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
                                             ids:
                                                 type: array
                                                 items:
-                                                    type: integer
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
+                                                    type: string
                                         title: ListCompaniesParams
                                 required:
                                     - data
@@ -2733,14 +2630,13 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createCompany
-            summary: Create and update company
+            summary: Create company
             tags:
                 - companies
             parameters:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2786,7 +2682,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2832,44 +2727,19 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: company_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: user_id
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -2889,14 +2759,6 @@ paths:
                                         description: Input parameters
                                         properties:
                                             company_id:
-                                                type: string
-                                            dir:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             user_id:
                                                 type: string
@@ -2922,7 +2784,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -2968,7 +2829,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3009,54 +2869,28 @@ paths:
             operationId: listCompanyPlans
             summary: List company plans
             tags:
-                - plans
+                - companies
             parameters:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: company_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: plan_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: active
                   in: query
-                  required: false
                   schema:
                     type: boolean
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -3078,14 +2912,6 @@ paths:
                                             active:
                                                 type: boolean
                                             company_id:
-                                                type: string
-                                            dir:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             plan_id:
                                                 type: string
@@ -3112,7 +2938,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3166,7 +2991,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3212,7 +3036,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3257,7 +3080,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3310,7 +3132,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3356,39 +3177,15 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: q
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -3407,14 +3204,6 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
                                             q:
                                                 type: string
                                         title: ListEventTypesParams
@@ -3440,7 +3229,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3486,39 +3274,15 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: q
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -3533,14 +3297,6 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
                                             q:
                                                 type: string
                                         title: CountEventTypesParams
@@ -3566,54 +3322,27 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: company_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: user_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: feature_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: event_subtype
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -3634,17 +3363,9 @@ paths:
                                         properties:
                                             company_id:
                                                 type: string
-                                            dir:
-                                                type: string
                                             event_subtype:
                                                 type: string
                                             feature_id:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             user_id:
                                                 type: string
@@ -3670,7 +3391,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3716,7 +3436,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3762,54 +3481,27 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: company_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: user_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: feature_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: event_subtype
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -3826,17 +3518,9 @@ paths:
                                         properties:
                                             company_id:
                                                 type: string
-                                            dir:
-                                                type: string
                                             event_subtype:
                                                 type: string
                                             feature_id:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             user_id:
                                                 type: string
@@ -3863,34 +3547,11 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -3908,15 +3569,6 @@ paths:
                                     params:
                                         type: object
                                         description: Input parameters
-                                        properties:
-                                            dir:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
                                         title: ListFeaturesParams
                                 required:
                                     - data
@@ -3939,7 +3591,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -3985,7 +3636,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4030,7 +3680,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4083,7 +3732,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4129,46 +3777,25 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: flag_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: flag_ids
                   in: query
-                  required: false
                   schema:
                     type: array
                     items:
                         type: string
-                - name: limit
+                - name: id
                   in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
                   schema:
                     type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -4181,25 +3808,19 @@ paths:
                                         type: array
                                         description: The returned resources
                                         items:
-                                            $ref: '#/components/schemas/FlagCheckLogResponseData'
+                                            $ref: '#/components/schemas/FlagCheckLogDetailResponseData'
                                         title: ListFlagChecksResponseData
                                     params:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
                                             flag_id:
                                                 type: string
                                             flag_ids:
                                                 type: array
                                                 items:
                                                     type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
+                                            id:
                                                 type: string
                                         title: ListFlagChecksParams
                                 required:
@@ -4224,7 +3845,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4243,7 +3863,7 @@ paths:
                                 type: object
                                 properties:
                                     data:
-                                        $ref: '#/components/schemas/FlagCheckLogResponseData'
+                                        $ref: '#/components/schemas/FlagCheckLogDetailResponseData'
                                     params:
                                         type: object
                                         description: Input parameters
@@ -4270,46 +3890,25 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: flag_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: flag_ids
                   in: query
-                  required: false
                   schema:
                     type: array
                     items:
                         type: string
-                - name: limit
+                - name: id
                   in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
                   schema:
                     type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -4324,19 +3923,13 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
                                             flag_id:
                                                 type: string
                                             flag_ids:
                                                 type: array
                                                 items:
                                                     type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
+                                            id:
                                                 type: string
                                         title: CountFlagChecksParams
                                 required:
@@ -4361,46 +3954,25 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: flag_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: flag_ids
                   in: query
-                  required: false
                   schema:
                     type: array
                     items:
                         type: string
-                - name: limit
+                - name: id
                   in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
                   schema:
                     type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -4419,19 +3991,13 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
                                             flag_id:
                                                 type: string
                                             flag_ids:
                                                 type: array
                                                 items:
                                                     type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
+                                            id:
                                                 type: string
                                         title: LatestFlagChecksParams
                                 required:
@@ -4456,7 +4022,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4467,43 +4032,18 @@ paths:
                     type: integer
                 - name: company_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: user_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: flag_id
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -4524,17 +4064,9 @@ paths:
                                         properties:
                                             company_id:
                                                 type: string
-                                            dir:
-                                                type: string
                                             entity_type:
                                                 type: integer
                                             flag_id:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             user_id:
                                                 type: string
@@ -4561,7 +4093,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4572,43 +4103,18 @@ paths:
                     type: integer
                 - name: company_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: user_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: flag_id
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -4625,17 +4131,9 @@ paths:
                                         properties:
                                             company_id:
                                                 type: string
-                                            dir:
-                                                type: string
                                             entity_type:
                                                 type: integer
                                             flag_id:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             user_id:
                                                 type: string
@@ -4662,46 +4160,21 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: feature_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: flag_ids
                   in: query
-                  required: false
                   schema:
                     type: array
                     items:
                         type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -4720,20 +4193,12 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
                                             feature_id:
                                                 type: string
                                             flag_ids:
                                                 type: array
                                                 items:
                                                     type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
                                         title: ListFlagsParams
                                 required:
                                     - data
@@ -4756,7 +4221,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4802,7 +4266,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4847,7 +4310,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4900,7 +4362,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4946,7 +4407,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -4998,7 +4458,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5044,19 +4503,16 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: start_time
                   in: query
-                  required: false
                   schema:
                     type: string
                     format: date-time
                 - name: end_time
                   in: query
-                  required: false
                   schema:
                     type: string
                     format: date-time
@@ -5065,43 +4521,24 @@ paths:
                   required: true
                   schema:
                     type: string
+                - name: event_subtypes
+                  in: query
+                  schema:
+                    type: array
+                    items:
+                        type: string
                 - name: company_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: user_id
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
                 - name: grouping
                   in: query
-                  required: false
                   schema:
                     type: string
             responses:
@@ -5124,20 +4561,16 @@ paths:
                                         properties:
                                             company_id:
                                                 type: string
-                                            dir:
-                                                type: string
                                             end_time:
                                                 type: string
                                                 format: date-time
                                             event_subtype:
                                                 type: string
+                                            event_subtypes:
+                                                type: array
+                                                items:
+                                                    type: string
                                             grouping:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
                                                 type: string
                                             start_time:
                                                 type: string
@@ -5167,19 +4600,16 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: start_time
                   in: query
-                  required: false
                   schema:
                     type: string
                     format: date-time
                 - name: end_time
                   in: query
-                  required: false
                   schema:
                     type: string
                     format: date-time
@@ -5188,40 +4618,22 @@ paths:
                   required: true
                   schema:
                     type: string
+                - name: event_subtypes
+                  in: query
+                  schema:
+                    type: array
+                    items:
+                        type: string
                 - name: company_id
                   in: query
-                  required: false
                   schema:
                     type: string
                 - name: user_id
                   in: query
-                  required: false
                   schema:
                     type: string
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -5242,19 +4654,15 @@ paths:
                                         properties:
                                             company_id:
                                                 type: string
-                                            dir:
-                                                type: string
                                             end_time:
                                                 type: string
                                                 format: date-time
                                             event_subtype:
                                                 type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
+                                            event_subtypes:
+                                                type: array
+                                                items:
+                                                    type: string
                                             start_time:
                                                 type: string
                                                 format: date-time
@@ -5283,7 +4691,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5337,34 +4744,11 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -5382,15 +4766,6 @@ paths:
                                     params:
                                         type: object
                                         description: Input parameters
-                                        properties:
-                                            dir:
-                                                type: string
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
                                         title: ListPlansParams
                                 required:
                                     - data
@@ -5413,7 +4788,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5459,7 +4833,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5504,7 +4877,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5557,7 +4929,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5603,7 +4974,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5649,7 +5019,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5694,7 +5063,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5748,41 +5116,17 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
                 - name: ids
                   in: query
-                  required: false
                   schema:
                     type: array
                     items:
-                        type: integer
-                - name: limit
-                  in: query
-                  description: Page limit (default 100)
-                  required: false
-                  schema:
-                    type: integer
-                - name: offset
-                  in: query
-                  description: Page offset (default 0)
-                  required: false
-                  schema:
-                    type: integer
-                - name: order
-                  in: query
-                  description: Order by column
-                  required: false
-                  schema:
-                    type: string
-                - name: dir
-                  in: query
-                  description: Order direction
-                  required: false
-                  schema:
-                    type: string
+                        type: string
+                - $ref: '#/components/parameters/PaginationLimit'
+                - $ref: '#/components/parameters/PaginationOffset'
             responses:
                 "200":
                     description: OK
@@ -5801,18 +5145,10 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            dir:
-                                                type: string
                                             ids:
                                                 type: array
                                                 items:
-                                                    type: integer
-                                            limit:
-                                                type: integer
-                                            offset:
-                                                type: integer
-                                            order:
-                                                type: string
+                                                    type: string
                                         title: ListUsersParams
                                 required:
                                     - data
@@ -5828,14 +5164,13 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createUser
-            summary: Create and update user
+            summary: Create user
             tags:
                 - companies
             parameters:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
@@ -5881,7 +5216,6 @@ paths:
                 - name: X-Schematic-Environment-Id
                   in: header
                   description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  required: false
                   schema:
                     type: string
                     title: EnvironmentIDParam
