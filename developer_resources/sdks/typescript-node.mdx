@@ -14,7 +14,6 @@ npm install @schematichq/schematic-typescript-node
 ### Initialization
 
 Initialize a client with an [API key secret](/quickstart#create-an-api-key).
-:
 
 ```typescript
 import * as schematic from "@schematichq/schematic-typescript-node";
@@ -25,7 +24,7 @@ const client = schematic.init(apiKey)
 
 ### Usage example
 
-Once the SDK is initialized, you may submit requests. Below is an example of upserting a Company (creating or updating it by its keys).
+Once the SDK is initialized, you may submit requests. Below is an example of upserting a Company (creating or updating it).
 
 ```typescript
 client.Companies.createCompany({
