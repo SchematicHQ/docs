@@ -29,7 +29,7 @@ Initialize a client with an [API key secret](/quickstart#create-an-api-key).
 ```php
 use Schematic;
 
-schematic_companies = new Schematic\Api\CompaniesApi(Schematic\Configuration::getDefaultConfiguration()
+$schematic_companies = new Schematic\Api\CompaniesApi(Schematic\Configuration::getDefaultConfiguration()
           ->setApiKey('X-Schematic-Api-Key', "sch_dev_yourapikey"))
 ```
 
@@ -41,7 +41,7 @@ Once the SDK is initialized, you may submit requests. Below is an example of ups
 
 ```php
 try {
-    schematic_companies->createCompany([
+    $schematic_companies->createCompany([
         "keys" => [
             "id" => $this->id,
         ],
