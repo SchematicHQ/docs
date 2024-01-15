@@ -1,18 +1,157 @@
 ---
-title: Go (Server)
+title: Go
 description: ""
 ---
 
-<Note>Coming soon!</Note>
+## Installation and Setup
 
-### Installation
+1. Install the Go library:
 
-...
+```go
+go get github.com/SchematicHQ/schematic-go
+```
 
-### Initialization
+2. [Issue an API key](/quickstart#create-an-api-key) for the appropriate environment using the [Schematic app](https://app.schematichq.com/settings/api-keys). Be sure to capture the secret key when you issue the API key; you'll only see this key once, and this is what you'll use with the Schematic Go library.
 
-...
+3. Using this secret key, initialize a client in your Go application:
 
-### Usage example
+```go
+import (
+  "os"
 
-...
+  "github.com/SchematicHQ/schematic-go"
+)
+
+func main() {
+  apiKey := os.Getenv("SCHEMATIC_API_KEY")
+  client := schematic.NewClient(apiKey)
+}
+```
+
+## Usage examples
+
+### Creating and updating companies
+
+Because you use your own identifiers to identify companies, rather than a Schematic company ID, creating and updating companies are both done via the same upsert operation:
+
+```go
+func main() {
+  client := schematic.NewClient(os.Getenv("SCHEMATIC_API_KEY"))
+
+  body := schematic.NewUpsertCompanyRequestBody(map[string]any{
+    "id": "your-company-id",
+  })
+  body.SetName("Acme Widgets, Inc.")
+  body.SetTraits(map[string]any{
+    "city":       "Atlanta",
+    "high_score": 25,
+    "is_active":  true,
+  })
+
+  resp, r, err := client.CompaniesApi.CreateCompany(context.Background()).UpsertCompanyRequestBody(*body).Execute()
+}
+```
+
+You can define any number of company keys; these are used to address the company in the future, for example by updating the company's traits or checking a flag for the company.
+You can also define any number of company traits; these can then be used as targeting parameters.
+
+
+### Creating and updating users
+
+Because you use your own identifiers to identify users, rather than a Schematic user ID, creating and updating users are both done via the same upsert operation:
+
+```go
+func main() {
+  client := schematic.NewClient(os.Getenv("SCHEMATIC_API_KEY"))
+
+  companyKeys := map[string]any{
+    "id": "your-company-id",
+  }
+  userKeys := map[string]any{
+    "email":   "wcoyote@acme.net",
+    "user-id": "your-user-id",
+  }
+  body := schematic.NewUpsertUserRequestBody(companyKeys, userKeys)
+  body.SetName("Wile E. Coyote")
+  body.SetTraits(map[string]any{
+    "city":        "Atlanta",
+    "login_count": 24,
+    "is_staff":    false,
+  })
+
+  resp, r, err := client.CompaniesApi.CreateUser(context.Background()).UpsertUserRequestBody(*body).Execute()
+}
+```
+
+You can define any number of user keys; these are used to address the user in the future, for example by updating the user's traits or checking a flag for the user.
+You can also define any number of user traits; these can then be used as targeting parameters.
+
+### Checking flags
+
+When checking a flag, you'll provide keys for a company and/or keys for a user. You can also provide no keys at all, in which case you'll get the default value for the flag.
+
+You can check all flags at once:
+
+```go
+func main() {
+  client := schematic.NewClient(os.Getenv("SCHEMATIC_API_KEY"))
+
+  flagContext := schematic.CheckFlagRequestBody{
+    Company: map[string]any{
+      "id": "your-company-id",
+    },
+    User: map[string]any{
+      "email":   "wcoyote@acme.net",
+      "user-id": "your-user-id",
+    },
+  }
+
+  resp, r, err := client.FeaturesApi.CheckFlags(ctx).CheckFlagRequestBody(flagContext).Execute()
+}
+```
+
+Or, you can check a single flag using its key:
+
+```go
+func main() {
+  client := schematic.NewClient(os.Getenv("SCHEMATIC_API_KEY"))
+
+  flagContext := schematic.CheckFlagRequestBody{
+    Company: map[string]any{
+      "id": "your-company-id",
+    },
+    User: map[string]any{
+      "email":   "wcoyote@acme.net",
+      "user-id": "your-user-id",
+    },
+  }
+
+  resp, r, err := client.FeaturesApi.CheckFlag(ctx, "some-flag-key").CheckFlagRequestBody(flagContext).Execute()
+}
+```
+
+
+### Sending track events
+
+Track activity in your application using track events; these events can later be used to produce metrics for targeting.
+
+```go
+func main() {
+  client := schematic.NewClient(os.Getenv("SCHEMATIC_API_KEY"))
+
+  eventBody := NewEventBodyTrack("some-action")
+  eventBody.SetUser(map[string]any{
+    "email":   "wcoyote@acme.net",
+    "user-id": "your-user-id",
+  })
+  eventBody.SetCompany(map[string]any{
+    "id": "your-company-id",
+  })
+
+  err := schematic.SendIdentifyEvent(context.Background(), client, body)
+}
+```
+
+### Other operations
+
+The Schematic API supports many operations beyond these. All API operations, as well as all types used therein, are documented in the [GitHub repository](https://github.com/schematichq/schematic-go).
