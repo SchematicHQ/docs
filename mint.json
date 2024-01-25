@@ -118,7 +118,6 @@
     {
       "group": "Plans",
       "pages": [
-        "api-reference/plans/upsert-billing-period",
         "api-reference/plans/list-plans",
         "api-reference/plans/create-plan",
         "api-reference/plans/get-plan",
@@ -134,7 +133,8 @@
         "api-reference/companies/get-company",
         "api-reference/companies/list-company-memberships",
         "api-reference/companies/create-company-membership",
-        "api-reference/companies/delete-company-membership"
+        "api-reference/companies/delete-company-membership",
+        "api-reference/companies/list-company-plans"
       ]
     },
     {
@@ -182,7 +182,8 @@
         "api-reference/features/update-flag",
         "api-reference/features/delete-flag",
         "api-reference/features/check-flag",
-        "api-reference/features/check-flags"
+        "api-reference/features/check-flags",
+        "api-reference/features/rules-flag"
       ]
     }
   ],
