@@ -8,19 +8,6 @@ security:
 servers:
     - url: https://api.schematichq.com
 components:
-    parameters:
-        PaginationLimit:
-            name: limit
-            in: query
-            description: Page limit (default 100)
-            schema:
-                type: integer
-        PaginationOffset:
-            name: offset
-            in: query
-            description: Page offset (default 0)
-            schema:
-                type: integer
     securitySchemes:
         ApiKeyAuth:
             type: apiKey
@@ -314,11 +301,10 @@ components:
             properties:
                 company:
                     type: object
+                    nullable: true
                 user:
                     type: object
                     nullable: true
-            required:
-                - company
             title: CheckFlagRequestBody
         CheckFlagResponseData:
             type: object
@@ -640,10 +626,6 @@ components:
                     type: string
                 name:
                     type: string
-                rules:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/CreateOrUpdateRuleRequestBody'
                 skip_webhooks:
                     type: boolean
                     nullable: true
@@ -653,7 +635,6 @@ components:
                 - flag_type
                 - key
                 - name
-                - rules
             title: CreateFlagRequestBody
         CreateOrUpdateConditionGroupRequestBody:
             type: object
@@ -737,10 +718,6 @@ components:
                     type: string
                 name:
                     type: string
-                rules:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/CreateOrUpdateRuleRequestBody'
                 skip_webhooks:
                     type: boolean
                     nullable: true
@@ -750,7 +727,6 @@ components:
                 - flag_type
                 - key
                 - name
-                - rules
             title: CreateOrUpdateFlagRequestBody
         CreateOrUpdateRuleRequestBody:
             type: object
@@ -838,32 +814,6 @@ components:
                 deleted:
                     type: boolean
                     description: Whether the delete was successful
-        EntityFlagValueResponseData:
-            type: object
-            properties:
-                company_id:
-                    type: string
-                entity_type:
-                    type: integer
-                environment_id:
-                    type: string
-                flag_id:
-                    type: string
-                rule_id:
-                    type: string
-                    nullable: true
-                user_id:
-                    type: string
-                    nullable: true
-                value:
-                    type: boolean
-            required:
-                - environment_id
-                - entity_type
-                - company_id
-                - flag_id
-                - value
-            title: EntityFlagValueResponseData
         EntityKeyResponseData:
             type: object
             properties:
@@ -1029,10 +979,10 @@ components:
                     type: string
                     nullable: true
             required:
-                - id
                 - body
                 - captured_at
                 - type
+                - id
                 - processing_status
                 - updated_at
             title: EventResponseData
@@ -1165,8 +1115,10 @@ components:
                     type: string
                 req_company:
                     type: object
+                    nullable: true
                 req_user:
                     type: object
+                    nullable: true
                 rule:
                     $ref: '#/components/schemas/RuleResponseData'
                 rule_id:
@@ -1189,8 +1141,6 @@ components:
                 - flag_key
                 - id
                 - reason
-                - req_company
-                - req_user
                 - updated_at
                 - value
             title: FlagCheckLogDetailResponseData
@@ -1221,8 +1171,10 @@ components:
                     type: string
                 req_company:
                     type: object
+                    nullable: true
                 req_user:
                     type: object
+                    nullable: true
                 rule_id:
                     type: string
                     nullable: true
@@ -1241,8 +1193,6 @@ components:
                 - flag_key
                 - id
                 - reason
-                - req_company
-                - req_user
                 - updated_at
                 - value
             title: FlagCheckLogResponseData
@@ -1600,6 +1550,17 @@ components:
                 - created_at
                 - updated_at
             title: RuleResponseData
+        RulesDetailResponseData:
+            type: object
+            description: The updated resource
+            properties:
+                rules:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/RuleDetailResponseData'
+            required:
+                - rules
+            title: RulesDetailResponseData
         UpdateApiKeyRequestBody:
             type: object
             properties:
@@ -1679,6 +1640,19 @@ components:
                     type: string
                     nullable: true
             title: UpdateFeatureRequestBody
+        UpdateFlagRulesRequestBody:
+            type: object
+            properties:
+                rules:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CreateOrUpdateRuleRequestBody'
+                skip_webhooks:
+                    type: boolean
+                    nullable: true
+            required:
+                - rules
+            title: UpdateFlagRulesRequestBody
         UpdatePlanRequestBody:
             type: object
             properties:
@@ -1911,8 +1885,16 @@ paths:
                   required: true
                   schema:
                     type: boolean
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -1933,6 +1915,10 @@ paths:
                                         properties:
                                             environment_id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             require_environment:
                                                 type: boolean
                                         title: ListApiKeysParams
@@ -2155,8 +2141,16 @@ paths:
                   required: true
                   schema:
                     type: boolean
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -2173,6 +2167,10 @@ paths:
                                         properties:
                                             environment_id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             require_environment:
                                                 type: boolean
                                         title: CountApiKeysParams
@@ -2205,8 +2203,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -2225,6 +2231,10 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             q:
                                                 type: string
                                         title: ListApiRequestsParams
@@ -2302,8 +2312,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -2318,6 +2336,10 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             q:
                                                 type: string
                                         title: CountApiRequestsParams
@@ -2591,8 +2613,16 @@ paths:
                     type: array
                     items:
                         type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -2615,6 +2645,10 @@ paths:
                                                 type: array
                                                 items:
                                                     type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                         title: ListCompaniesParams
                                 required:
                                     - data
@@ -2630,7 +2664,7 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createCompany
-            summary: Create or update company
+            summary: Create company
             tags:
                 - companies
             parameters:
@@ -2738,8 +2772,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -2760,6 +2802,10 @@ paths:
                                         properties:
                                             company_id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             user_id:
                                                 type: string
                                         title: ListCompanyMembershipsParams
@@ -2889,8 +2935,16 @@ paths:
                   in: query
                   schema:
                     type: boolean
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -2913,6 +2967,10 @@ paths:
                                                 type: boolean
                                             company_id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             plan_id:
                                                 type: string
                                         title: ListCompanyPlansParams
@@ -3184,8 +3242,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -3204,6 +3270,10 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             q:
                                                 type: string
                                         title: ListEventTypesParams
@@ -3281,8 +3351,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -3297,6 +3375,10 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             q:
                                                 type: string
                                         title: CountEventTypesParams
@@ -3341,8 +3423,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -3367,6 +3457,10 @@ paths:
                                                 type: string
                                             feature_id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             user_id:
                                                 type: string
                                         title: ListEventsParams
@@ -3500,8 +3594,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -3522,6 +3624,10 @@ paths:
                                                 type: string
                                             feature_id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             user_id:
                                                 type: string
                                         title: CountEventsParams
@@ -3550,8 +3656,16 @@ paths:
                   schema:
                     type: string
                     title: EnvironmentIDParam
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -3569,6 +3683,11 @@ paths:
                                     params:
                                         type: object
                                         description: Input parameters
+                                        properties:
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                         title: ListFeaturesParams
                                 required:
                                     - data
@@ -3794,8 +3913,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -3822,6 +3949,10 @@ paths:
                                                     type: string
                                             id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                         title: ListFlagChecksParams
                                 required:
                                     - data
@@ -3907,8 +4038,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -3931,6 +4070,10 @@ paths:
                                                     type: string
                                             id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                         title: CountFlagChecksParams
                                 required:
                                     - data
@@ -3971,8 +4114,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -3999,149 +4150,15 @@ paths:
                                                     type: string
                                             id:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                         title: LatestFlagChecksParams
                                 required:
                                     - data
                                     - params
                                 title: LatestFlagChecksResponse
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "500":
-                    $ref: '#/components/responses/ServerError'
-    /flag-values:
-        get:
-            operationId: listFlagValues
-            summary: List flag values
-            tags:
-                - features
-            parameters:
-                - name: X-Schematic-Environment-Id
-                  in: header
-                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  schema:
-                    type: string
-                    title: EnvironmentIDParam
-                - name: entity_type
-                  in: query
-                  required: true
-                  schema:
-                    type: integer
-                - name: company_id
-                  in: query
-                  schema:
-                    type: string
-                - name: user_id
-                  in: query
-                  schema:
-                    type: string
-                - name: flag_id
-                  in: query
-                  schema:
-                    type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        type: array
-                                        description: The returned resources
-                                        items:
-                                            $ref: '#/components/schemas/EntityFlagValueResponseData'
-                                        title: ListFlagValuesResponseData
-                                    params:
-                                        type: object
-                                        description: Input parameters
-                                        properties:
-                                            company_id:
-                                                type: string
-                                            entity_type:
-                                                type: integer
-                                            flag_id:
-                                                type: string
-                                            user_id:
-                                                type: string
-                                        title: ListFlagValuesParams
-                                required:
-                                    - data
-                                    - params
-                                title: ListFlagValuesResponse
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "500":
-                    $ref: '#/components/responses/ServerError'
-    /flag-values/count:
-        get:
-            operationId: countFlagValues
-            summary: Count flag values
-            tags:
-                - features
-            parameters:
-                - name: X-Schematic-Environment-Id
-                  in: header
-                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  schema:
-                    type: string
-                    title: EnvironmentIDParam
-                - name: entity_type
-                  in: query
-                  required: true
-                  schema:
-                    type: integer
-                - name: company_id
-                  in: query
-                  schema:
-                    type: string
-                - name: user_id
-                  in: query
-                  schema:
-                    type: string
-                - name: flag_id
-                  in: query
-                  schema:
-                    type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        $ref: '#/components/schemas/CountResponse'
-                                    params:
-                                        type: object
-                                        description: Input parameters
-                                        properties:
-                                            company_id:
-                                                type: string
-                                            entity_type:
-                                                type: integer
-                                            flag_id:
-                                                type: string
-                                            user_id:
-                                                type: string
-                                        title: CountFlagValuesParams
-                                required:
-                                    - data
-                                    - params
-                                title: CountFlagValuesResponse
                 "400":
                     $ref: '#/components/responses/BadRequest'
                 "401":
@@ -4173,8 +4190,16 @@ paths:
                     type: array
                     items:
                         type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -4199,6 +4224,10 @@ paths:
                                                 type: array
                                                 items:
                                                     type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                         title: ListFlagsParams
                                 required:
                                     - data
@@ -4397,6 +4426,59 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
+    /flags/{flag_id}/rules:
+        put:
+            operationId: rulesFlag
+            summary: Rules flag
+            tags:
+                - features
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: flag_id
+                  in: path
+                  description: flag_id
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateFlagRulesRequestBody'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/RulesDetailResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: RulesFlagParams
+                                required:
+                                    - data
+                                    - params
+                                title: RulesFlagResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
     /flags/{key}/check:
         post:
             operationId: checkFlag
@@ -4535,8 +4617,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
                 - name: grouping
                   in: query
                   schema:
@@ -4572,6 +4662,10 @@ paths:
                                                     type: string
                                             grouping:
                                                 type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             start_time:
                                                 type: string
                                                 format: date-time
@@ -4632,8 +4726,16 @@ paths:
                   in: query
                   schema:
                     type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -4663,6 +4765,10 @@ paths:
                                                 type: array
                                                 items:
                                                     type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                             start_time:
                                                 type: string
                                                 format: date-time
@@ -4747,8 +4853,16 @@ paths:
                   schema:
                     type: string
                     title: EnvironmentIDParam
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -4766,6 +4880,11 @@ paths:
                                     params:
                                         type: object
                                         description: Input parameters
+                                        properties:
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                         title: ListPlansParams
                                 required:
                                     - data
@@ -5125,8 +5244,16 @@ paths:
                     type: array
                     items:
                         type: string
-                - $ref: '#/components/parameters/PaginationLimit'
-                - $ref: '#/components/parameters/PaginationOffset'
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
             responses:
                 "200":
                     description: OK
@@ -5149,6 +5276,10 @@ paths:
                                                 type: array
                                                 items:
                                                     type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
                                         title: ListUsersParams
                                 required:
                                     - data
@@ -5164,7 +5295,7 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createUser
-            summary: Create or update user
+            summary: Create user
             tags:
                 - companies
             parameters:

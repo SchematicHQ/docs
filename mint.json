@@ -10,7 +10,7 @@
   },
   "analytics": {
     "gtm": {
-        "tagId": "GTM-T9HDDC54"
+      "tagId": "GTM-T9HDDC54"
     }
   },
   "favicon": "/favicon.png",
@@ -69,20 +69,19 @@
     {
       "group": "Developer Resources",
       "pages": [
-              "developer_resources/concepts",
-              "developer_resources/environments",
-              {
-                "group": "SDKs",
-                "pages": [
-                  "developer_resources/sdks/javascript",
-                  "developer_resources/sdks/ruby",
-                  "developer_resources/sdks/typescript-node",
-                  "developer_resources/sdks/go",
-                  "developer_resources/sdks/php"
-                ]
-              }
-
-              ]
+        "developer_resources/concepts",
+        "developer_resources/environments",
+        {
+          "group": "SDKs",
+          "pages": [
+            "developer_resources/sdks/javascript",
+            "developer_resources/sdks/ruby",
+            "developer_resources/sdks/typescript-node",
+            "developer_resources/sdks/go",
+            "developer_resources/sdks/php"
+          ]
+        }
+      ]
     },
     {
       "group": "Integrations",
@@ -177,7 +176,6 @@
       "pages": [
         "api-reference/features/list-flag-checks",
         "api-reference/features/latest-flag-checks",
-        "api-reference/features/list-flag-values",
         "api-reference/features/list-flags",
         "api-reference/features/create-flag",
         "api-reference/features/get-flag",
