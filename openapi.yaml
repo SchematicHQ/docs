@@ -2730,7 +2730,7 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createCompany
-            summary: Create company
+            summary: Create or update company
             tags:
                 - companies
             parameters:
@@ -5865,7 +5865,7 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createUser
-            summary: Create user
+            summary: Create or update user
             tags:
                 - companies
             parameters:
