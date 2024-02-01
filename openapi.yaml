@@ -239,37 +239,6 @@ components:
                 - conditions
                 - condition_groups
             title: AudienceRequestBody
-        BillingPeriodResponseData:
-            type: object
-            description: The returned resource
-            properties:
-                company_id:
-                    type: string
-                created_at:
-                    type: string
-                    format: date-time
-                ended_at:
-                    type: string
-                    format: date-time
-                    nullable: true
-                environment_id:
-                    type: string
-                id:
-                    type: string
-                started_at:
-                    type: string
-                    format: date-time
-                updated_at:
-                    type: string
-                    format: date-time
-            required:
-                - id
-                - environment_id
-                - company_id
-                - started_at
-                - created_at
-                - updated_at
-            title: BillingPeriodResponseData
         CheckFlagOutputWithFlagKey:
             type: object
             properties:
@@ -421,6 +390,50 @@ components:
                 - created_at
                 - updated_at
             title: CompanyMembershipResponseData
+        CompanyOverrideResponseData:
+            type: object
+            description: The updated resource
+            properties:
+                company_id:
+                    type: string
+                created_at:
+                    type: string
+                    format: date-time
+                environment_id:
+                    type: string
+                feature_id:
+                    type: string
+                id:
+                    type: string
+                metric_period:
+                    type: string
+                    nullable: true
+                rule_id:
+                    type: string
+                updated_at:
+                    type: string
+                    format: date-time
+                value_bool:
+                    type: boolean
+                    nullable: true
+                value_numeric:
+                    type: integer
+                    nullable: true
+                value_trait_id:
+                    type: string
+                    nullable: true
+                value_type:
+                    type: string
+            required:
+                - id
+                - environment_id
+                - feature_id
+                - company_id
+                - rule_id
+                - value_type
+                - created_at
+                - updated_at
+            title: CompanyOverrideResponseData
         CompanyPlanResponseData:
             type: object
             properties:
@@ -429,19 +442,12 @@ components:
                 created_at:
                     type: string
                     format: date-time
-                ended_at:
-                    type: string
-                    format: date-time
-                    nullable: true
                 environment_id:
                     type: string
                 id:
                     type: string
                 plan_id:
                     type: string
-                started_at:
-                    type: string
-                    format: date-time
                 updated_at:
                     type: string
                     format: date-time
@@ -450,7 +456,6 @@ components:
                 - environment_id
                 - company_id
                 - plan_id
-                - started_at
                 - created_at
                 - updated_at
             title: CompanyPlanResponseData
@@ -503,6 +508,32 @@ components:
             required:
                 - name
             title: CreateApiKeyRequestBody
+        CreateCompanyOverrideRequestBody:
+            type: object
+            properties:
+                company_id:
+                    type: string
+                feature_id:
+                    type: string
+                metric_period:
+                    type: string
+                    nullable: true
+                value_bool:
+                    type: boolean
+                    nullable: true
+                value_numeric:
+                    type: integer
+                    nullable: true
+                value_trait_id:
+                    type: string
+                    nullable: true
+                value_type:
+                    type: string
+            required:
+                - company_id
+                - feature_id
+                - value_type
+            title: CreateCompanyOverrideRequestBody
         CreateEnvironmentRequestBody:
             type: object
             properties:
@@ -510,9 +541,6 @@ components:
                     type: string
                 name:
                     type: string
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
             required:
                 - name
                 - environment_type
@@ -599,9 +627,6 @@ components:
                     nullable: true
                 name:
                     type: string
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
                 trait_id:
                     type: string
                     nullable: true
@@ -626,9 +651,6 @@ components:
                     type: string
                 name:
                     type: string
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
             required:
                 - default_value
                 - description
@@ -718,9 +740,6 @@ components:
                     type: string
                 name:
                     type: string
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
             required:
                 - default_value
                 - description
@@ -749,9 +768,6 @@ components:
                 priority_group:
                     type: integer
                     nullable: true
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
                 value:
                     type: boolean
             required:
@@ -761,17 +777,63 @@ components:
                 - priority
                 - value
             title: CreateOrUpdateRuleRequestBody
+        CreatePlanEntitlementRequestBody:
+            type: object
+            properties:
+                feature_id:
+                    type: string
+                metric_period:
+                    type: string
+                    nullable: true
+                plan_id:
+                    type: string
+                value_bool:
+                    type: boolean
+                    nullable: true
+                value_numeric:
+                    type: integer
+                    nullable: true
+                value_trait_id:
+                    type: string
+                    nullable: true
+                value_type:
+                    type: string
+            required:
+                - plan_id
+                - feature_id
+                - value_type
+            title: CreatePlanEntitlementRequestBody
         CreatePlanRequestBody:
             type: object
             properties:
                 name:
                     type: string
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
             required:
                 - name
             title: CreatePlanRequestBody
+        CreateReqCommon:
+            type: object
+            properties:
+                feature_id:
+                    type: string
+                metric_period:
+                    type: string
+                    nullable: true
+                value_bool:
+                    type: boolean
+                    nullable: true
+                value_numeric:
+                    type: integer
+                    nullable: true
+                value_trait_id:
+                    type: string
+                    nullable: true
+                value_type:
+                    type: string
+            required:
+                - feature_id
+                - value_type
+            title: CreateReqCommon
         CreateRuleRequestBody:
             type: object
             properties:
@@ -795,9 +857,6 @@ components:
                     type: integer
                 priority_group:
                     type: integer
-                    nullable: true
-                skip_webhooks:
-                    type: boolean
                     nullable: true
                 value:
                     type: boolean
@@ -1321,6 +1380,50 @@ components:
                     description: Page offset (default 0)
                     nullable: true
             title: PaginationFilter
+        PlanEntitlementResponseData:
+            type: object
+            description: The updated resource
+            properties:
+                created_at:
+                    type: string
+                    format: date-time
+                environment_id:
+                    type: string
+                feature_id:
+                    type: string
+                id:
+                    type: string
+                metric_period:
+                    type: string
+                    nullable: true
+                plan_id:
+                    type: string
+                rule_id:
+                    type: string
+                updated_at:
+                    type: string
+                    format: date-time
+                value_bool:
+                    type: boolean
+                    nullable: true
+                value_numeric:
+                    type: integer
+                    nullable: true
+                value_trait_id:
+                    type: string
+                    nullable: true
+                value_type:
+                    type: string
+            required:
+                - id
+                - environment_id
+                - feature_id
+                - plan_id
+                - rule_id
+                - value_type
+                - created_at
+                - updated_at
+            title: PlanEntitlementResponseData
         PlanResponseData:
             type: object
             description: The updated resource
@@ -1582,19 +1685,33 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/CreateOrUpdateConditionRequestBody'
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
             required:
                 - conditions
                 - condition_groups
             title: UpdateAudienceRequestBody
+        UpdateCompanyOverrideRequestBody:
+            type: object
+            properties:
+                metric_period:
+                    type: string
+                    nullable: true
+                value_bool:
+                    type: boolean
+                    nullable: true
+                value_numeric:
+                    type: integer
+                    nullable: true
+                value_trait_id:
+                    type: string
+                    nullable: true
+                value_type:
+                    type: string
+            required:
+                - value_type
+            title: UpdateCompanyOverrideRequestBody
         UpdateEntityTraitDefinitionRequestBody:
             type: object
             properties:
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
                 trait_type:
                     type: string
             required:
@@ -1608,9 +1725,6 @@ components:
                     nullable: true
                 name:
                     type: string
-                    nullable: true
-                skip_webhooks:
-                    type: boolean
                     nullable: true
             title: UpdateEnvironmentRequestBody
         UpdateFeatureRequestBody:
@@ -1633,9 +1747,6 @@ components:
                 name:
                     type: string
                     nullable: true
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
                 trait_id:
                     type: string
                     nullable: true
@@ -1647,23 +1758,57 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/CreateOrUpdateRuleRequestBody'
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
             required:
                 - rules
             title: UpdateFlagRulesRequestBody
+        UpdatePlanEntitlementRequestBody:
+            type: object
+            properties:
+                metric_period:
+                    type: string
+                    nullable: true
+                value_bool:
+                    type: boolean
+                    nullable: true
+                value_numeric:
+                    type: integer
+                    nullable: true
+                value_trait_id:
+                    type: string
+                    nullable: true
+                value_type:
+                    type: string
+            required:
+                - value_type
+            title: UpdatePlanEntitlementRequestBody
         UpdatePlanRequestBody:
             type: object
             properties:
                 name:
                     type: string
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
             required:
                 - name
             title: UpdatePlanRequestBody
+        UpdateReqCommon:
+            type: object
+            properties:
+                metric_period:
+                    type: string
+                    nullable: true
+                value_bool:
+                    type: boolean
+                    nullable: true
+                value_numeric:
+                    type: integer
+                    nullable: true
+                value_trait_id:
+                    type: string
+                    nullable: true
+                value_type:
+                    type: string
+            required:
+                - value_type
+            title: UpdateReqCommon
         UpdateRuleRequestBody:
             type: object
             properties:
@@ -1682,9 +1827,6 @@ components:
                 priority_group:
                     type: integer
                     nullable: true
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
                 value:
                     type: boolean
             required:
@@ -1694,22 +1836,6 @@ components:
                 - priority
                 - value
             title: UpdateRuleRequestBody
-        UpsertBillingPeriodRequestBody:
-            type: object
-            properties:
-                company_id:
-                    type: string
-                ended_at:
-                    type: string
-                    format: date-time
-                    nullable: true
-                started_at:
-                    type: string
-                    format: date-time
-            required:
-                - company_id
-                - started_at
-            title: UpsertBillingPeriodRequestBody
         UpsertCompanyRequestBody:
             type: object
             properties:
@@ -1724,9 +1850,6 @@ components:
                     nullable: true
                 name:
                     type: string
-                    nullable: true
-                skip_webhooks:
-                    type: boolean
                     nullable: true
                 traits:
                     type: object
@@ -1756,9 +1879,6 @@ components:
                 name:
                     type: string
                     nullable: true
-                skip_webhooks:
-                    type: boolean
-                    nullable: true
                 traits:
                     type: object
                     description: A map of trait names to trait values
@@ -1784,9 +1904,6 @@ components:
                     nullable: true
                 name:
                     type: string
-                    nullable: true
-                skip_webhooks:
-                    type: boolean
                     nullable: true
                 traits:
                     type: object
@@ -2543,57 +2660,6 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
-    /billing-periods/{key}/upsert:
-        post:
-            operationId: upsertBillingPeriod
-            summary: Upsert billing period
-            tags:
-                - plans
-            parameters:
-                - name: X-Schematic-Environment-Id
-                  in: header
-                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  schema:
-                    type: string
-                    title: EnvironmentIDParam
-                - name: key
-                  in: path
-                  description: key
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpsertBillingPeriodRequestBody'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        $ref: '#/components/schemas/BillingPeriodResponseData'
-                                    params:
-                                        type: object
-                                        description: Input parameters
-                                        title: UpsertBillingPeriodParams
-                                required:
-                                    - data
-                                    - params
-                                title: UpsertBillingPeriodResponse
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "500":
-                    $ref: '#/components/responses/ServerError'
     /companies:
         get:
             operationId: listCompanies
@@ -2910,6 +2976,261 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
+    /company-overrides:
+        get:
+            operationId: listCompanyOverrides
+            summary: List company overrides
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: company_id
+                  in: query
+                  schema:
+                    type: string
+                - name: feature_id
+                  in: query
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        description: The returned resources
+                                        items:
+                                            $ref: '#/components/schemas/CompanyOverrideResponseData'
+                                        title: ListCompanyOverridesResponseData
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            company_id:
+                                                type: string
+                                            feature_id:
+                                                type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
+                                        title: ListCompanyOverridesParams
+                                required:
+                                    - data
+                                    - params
+                                title: ListCompanyOverridesResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+        post:
+            operationId: createCompanyOverride
+            summary: Create company override
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateCompanyOverrideRequestBody'
+                required: true
+            responses:
+                "201":
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/CompanyOverrideResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: CreateCompanyOverrideParams
+                                required:
+                                    - data
+                                    - params
+                                title: CreateCompanyOverrideResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /company-overrides/{company_override_id}:
+        get:
+            operationId: getCompanyOverride
+            summary: Get company override
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: company_override_id
+                  in: path
+                  description: company_override_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/CompanyOverrideResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: GetCompanyOverrideParams
+                                required:
+                                    - data
+                                    - params
+                                title: GetCompanyOverrideResponse
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+        put:
+            operationId: updateCompanyOverride
+            summary: Update company override
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: company_override_id
+                  in: path
+                  description: company_override_id
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateCompanyOverrideRequestBody'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/CompanyOverrideResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: UpdateCompanyOverrideParams
+                                required:
+                                    - data
+                                    - params
+                                title: UpdateCompanyOverrideResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+        delete:
+            operationId: deleteCompanyOverride
+            summary: Delete company override
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: company_override_id
+                  in: path
+                  description: company_override_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/DeleteResponse'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: DeleteCompanyOverrideParams
+                                required:
+                                    - data
+                                    - params
+                                title: DeleteCompanyOverrideResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
     /company-plans:
         get:
             operationId: listCompanyPlans
@@ -2931,10 +3252,6 @@ paths:
                   in: query
                   schema:
                     type: string
-                - name: active
-                  in: query
-                  schema:
-                    type: boolean
                 - name: limit
                   in: query
                   description: Page limit (default 100)
@@ -2963,8 +3280,6 @@ paths:
                                         type: object
                                         description: Input parameters
                                         properties:
-                                            active:
-                                                type: boolean
                                             company_id:
                                                 type: string
                                             limit:
@@ -4840,6 +5155,261 @@ paths:
                     $ref: '#/components/responses/NotFound'
                 "500":
                     $ref: '#/components/responses/ServerError'
+    /plan-entitlements:
+        get:
+            operationId: listPlanEntitlements
+            summary: List plan entitlements
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: plan_id
+                  in: query
+                  schema:
+                    type: string
+                - name: feature_id
+                  in: query
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  description: Page limit (default 100)
+                  schema:
+                    type: integer
+                - name: offset
+                  in: query
+                  description: Page offset (default 0)
+                  schema:
+                    type: integer
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        description: The returned resources
+                                        items:
+                                            $ref: '#/components/schemas/PlanEntitlementResponseData'
+                                        title: ListPlanEntitlementsResponseData
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            feature_id:
+                                                type: string
+                                            limit:
+                                                type: integer
+                                            offset:
+                                                type: integer
+                                            plan_id:
+                                                type: string
+                                        title: ListPlanEntitlementsParams
+                                required:
+                                    - data
+                                    - params
+                                title: ListPlanEntitlementsResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+        post:
+            operationId: createPlanEntitlement
+            summary: Create plan entitlement
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreatePlanEntitlementRequestBody'
+                required: true
+            responses:
+                "201":
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/PlanEntitlementResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: CreatePlanEntitlementParams
+                                required:
+                                    - data
+                                    - params
+                                title: CreatePlanEntitlementResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /plan-entitlements/{plan_entitlement_id}:
+        get:
+            operationId: getPlanEntitlement
+            summary: Get plan entitlement
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: plan_entitlement_id
+                  in: path
+                  description: plan_entitlement_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/PlanEntitlementResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: GetPlanEntitlementParams
+                                required:
+                                    - data
+                                    - params
+                                title: GetPlanEntitlementResponse
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+        put:
+            operationId: updatePlanEntitlement
+            summary: Update plan entitlement
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: plan_entitlement_id
+                  in: path
+                  description: plan_entitlement_id
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdatePlanEntitlementRequestBody'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/PlanEntitlementResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: UpdatePlanEntitlementParams
+                                required:
+                                    - data
+                                    - params
+                                title: UpdatePlanEntitlementResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+        delete:
+            operationId: deletePlanEntitlement
+            summary: Delete plan entitlement
+            tags:
+                - entitlements
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: plan_entitlement_id
+                  in: path
+                  description: plan_entitlement_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/DeleteResponse'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: DeletePlanEntitlementParams
+                                required:
+                                    - data
+                                    - params
+                                title: DeletePlanEntitlementResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
     /plans:
         get:
             operationId: listPlans
@@ -5388,3 +5958,4 @@ tags:
     - name: events
     - name: features
     - name: plans
+    - name: entitlements

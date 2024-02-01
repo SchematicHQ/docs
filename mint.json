@@ -118,7 +118,6 @@
     {
       "group": "Plans",
       "pages": [
-        "api-reference/plans/upsert-billing-period",
         "api-reference/plans/list-plans",
         "api-reference/plans/create-plan",
         "api-reference/plans/get-plan",
@@ -183,6 +182,21 @@
         "api-reference/features/delete-flag",
         "api-reference/features/check-flag",
         "api-reference/features/check-flags"
+      ]
+    },
+    {
+      "group": "Entitlements",
+      "pages": [
+        "api-reference/entitlements/list-company-overrides",
+        "api-reference/entitlements/get-company-override",
+        "api-reference/entitlements/create-company-override",
+        "api-reference/entitlements/update-company-override",
+        "api-reference/entitlements/delete-company-override",
+        "api-reference/entitlements/list-plan-entitlements",
+        "api-reference/entitlements/get-plan-entitlement",
+        "api-reference/entitlements/create-plan-entitlement",
+        "api-reference/entitlements/update-plan-entitlement",
+        "api-reference/entitlements/delete-plan-entitlement"
       ]
     }
   ],
