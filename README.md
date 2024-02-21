@@ -22,9 +22,20 @@ Run the following command at the root of your documentation (where mint.json is)
 mintlify dev
 ```
 
+### Updating API docs
+
+1. Update openapi.yaml file
+2. Genenerate API reference files:
+
+```
+npx @mintlify/scraping@latest openapi-file openapi.yaml -o api-reference/
+```
+
+3. Update mint.json file to add, remove, or update references to the API references pages that need to be changed
+
 ### 😎 Publishing Changes
 
-Install our Github App to autopropagate changes from youre repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard. 
+Install our Github App to autopropagate changes from youre repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard.
 
 #### Troubleshooting
 

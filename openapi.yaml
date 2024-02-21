@@ -131,11 +131,11 @@ components:
                 url:
                     type: string
             required:
-                - id
                 - api_key_id
-                - url
                 - method
+                - id
                 - started_at
+                - url
             title: ApiKeyRequestListResponseData
         ApiKeyRequestResponseData:
             type: object
@@ -172,11 +172,11 @@ components:
                     type: string
                     nullable: true
             required:
-                - id
                 - api_key_id
-                - url
                 - method
+                - id
                 - started_at
+                - url
             title: ApiKeyRequestResponseData
         ApiKeyResponseData:
             type: object
@@ -987,7 +987,6 @@ components:
             title: EnvironmentResponseData
         EventResponseData:
             type: object
-            description: The created resource
             properties:
                 api_key:
                     type: string
@@ -1007,6 +1006,9 @@ components:
                 environment_id:
                     type: string
                     nullable: true
+                error_message:
+                    type: string
+                    nullable: true
                 feature_id:
                     type: string
                     nullable: true
@@ -1020,12 +1022,12 @@ components:
                     type: string
                     format: date-time
                     nullable: true
-                processing_status:
-                    type: string
                 sent_at:
                     type: string
                     format: date-time
                     nullable: true
+                status:
+                    type: string
                 subtype:
                     type: string
                     nullable: true
@@ -1042,7 +1044,7 @@ components:
                 - captured_at
                 - type
                 - id
-                - processing_status
+                - status
                 - updated_at
             title: EventResponseData
         EventSummaryResponseData:
@@ -1444,6 +1446,28 @@ components:
                 - created_at
                 - updated_at
             title: PlanResponseData
+        RawEventResponseData:
+            type: object
+            description: The created resource
+            properties:
+                captured_at:
+                    type: string
+                    format: date-time
+                event:
+                    type: string
+                remote_addr:
+                    type: string
+                remote_ip:
+                    type: string
+                user_agent:
+                    type: string
+            required:
+                - captured_at
+                - event
+                - remote_addr
+                - remote_ip
+                - user_agent
+            title: RawEventResponseData
         RuleConditionGroupDetailResponseData:
             type: object
             properties:
@@ -2367,7 +2391,7 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
-    /api-requests/{api_request_id}:
+    /api-requests/{key}:
         get:
             operationId: getApiRequest
             summary: Get api request
@@ -2380,9 +2404,9 @@ paths:
                   schema:
                     type: string
                     title: EnvironmentIDParam
-                - name: api_request_id
+                - name: key
                   in: path
-                  description: api_request_id
+                  description: key
                   required: true
                   schema:
                     type: string
@@ -2730,7 +2754,7 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createCompany
-            summary: Create or update company
+            summary: Create company
             tags:
                 - companies
             parameters:
@@ -2809,6 +2833,54 @@ paths:
                                     - data
                                     - params
                                 title: GetCompanyResponse
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /companies/lookup:
+        get:
+            operationId: lookupCompany
+            summary: Lookup company
+            tags:
+                - companies
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: keys
+                  in: query
+                  description: Key/value pairs
+                  required: true
+                  schema:
+                    type: object
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/CompanyDetailResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            keys:
+                                                type: object
+                                        title: LookupCompanyParams
+                                required:
+                                    - data
+                                    - params
+                                title: LookupCompanyResponse
                 "401":
                     $ref: '#/components/responses/Unauthorized'
                 "403":
@@ -3818,7 +3890,7 @@ paths:
                                 type: object
                                 properties:
                                     data:
-                                        $ref: '#/components/schemas/EventResponseData'
+                                        $ref: '#/components/schemas/RawEventResponseData'
                                     params:
                                         type: object
                                         description: Input parameters
@@ -5865,7 +5937,7 @@ paths:
                     $ref: '#/components/responses/ServerError'
         post:
             operationId: createUser
-            summary: Create or update user
+            summary: Create user
             tags:
                 - companies
             parameters:
@@ -5944,6 +6016,54 @@ paths:
                                     - data
                                     - params
                                 title: GetUserResponse
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+    /users/lookup:
+        get:
+            operationId: lookupUser
+            summary: Lookup user
+            tags:
+                - companies
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: keys
+                  in: query
+                  description: Key/value pairs
+                  required: true
+                  schema:
+                    type: object
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/UserDetailResponseData'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        properties:
+                                            keys:
+                                                type: object
+                                        title: LookupUserParams
+                                required:
+                                    - data
+                                    - params
+                                title: LookupUserResponse
                 "401":
                     $ref: '#/components/responses/Unauthorized'
                 "403":

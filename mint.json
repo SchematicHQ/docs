@@ -130,7 +130,7 @@
       "pages": [
         "api-reference/companies/list-companies",
         "api-reference/companies/create-company",
-        "api-reference/companies/get-company",
+        "api-reference/companies/lookup-company",
         "api-reference/companies/list-company-memberships",
         "api-reference/companies/create-company-membership",
         "api-reference/companies/delete-company-membership",
@@ -148,7 +148,7 @@
       "pages": [
         "api-reference/companies/list-users",
         "api-reference/companies/create-user",
-        "api-reference/companies/get-user"
+        "api-reference/companies/lookup-user"
       ]
     },
     {
