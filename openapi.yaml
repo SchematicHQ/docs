@@ -518,6 +518,10 @@ components:
                 metric_period:
                     type: string
                     nullable: true
+                    enum:
+                        - current_month
+                        - current_week
+                        - current_day
                 value_bool:
                     type: boolean
                     nullable: true
@@ -529,6 +533,11 @@ components:
                     nullable: true
                 value_type:
                     type: string
+                    enum:
+                        - Boolean
+                        - Numeric
+                        - Trait
+                        - Unlimited
             required:
                 - company_id
                 - feature_id
@@ -539,6 +548,10 @@ components:
             properties:
                 environment_type:
                     type: string
+                    enum:
+                        - development
+                        - staging
+                        - production
                 name:
                     type: string
             required:
@@ -602,6 +615,9 @@ components:
                 event_type:
                     type: string
                     description: Either 'identify' or 'track'
+                    enum:
+                        - identify
+                        - track
                 sent_at:
                     type: string
                     description: Optionally provide a timestamp at which the event was sent to Schematic
@@ -620,6 +636,10 @@ components:
                     nullable: true
                 feature_type:
                     type: string
+                    enum:
+                        - boolean
+                        - event
+                        - trait
                 flag:
                     $ref: '#/components/schemas/CreateOrUpdateFlagRequestBody'
                 lifecycle_phase:
@@ -686,6 +706,12 @@ components:
                     nullable: true
                 condition_type:
                     type: string
+                    enum:
+                        - company
+                        - metric
+                        - trait
+                        - user
+                        - plan
                 event_subtype:
                     type: string
                     description: Name of track event type used to measure this condition
@@ -697,14 +723,25 @@ components:
                     type: string
                     description: Period of time over which to measure the track event metric
                     nullable: true
+                    enum:
+                        - current_month
+                        - current_week
+                        - current_day
                 metric_value:
                     type: integer
                     description: Value to compare the track event metric against
                 operator:
                     type: string
+                    enum:
+                        - eq
+                        - ne
+                        - gt
+                        - gte
+                        - lt
+                        - lte
                 resource_ids:
                     type: array
-                    description: List of resource IDs (companise, users, or plans) targeted by this condition
+                    description: List of resource IDs (companies, users, or plans) targeted by this condition
                     items:
                         type: string
                 trait_id:
@@ -768,6 +805,16 @@ components:
                 priority_group:
                     type: integer
                     nullable: true
+                rule_type:
+                    type: string
+                    nullable: true
+                    enum:
+                        - global_override
+                        - company_override
+                        - plan_entitlement
+                        - standard
+                        - default
+                        - plan_audience
                 value:
                     type: boolean
             required:
@@ -785,6 +832,10 @@ components:
                 metric_period:
                     type: string
                     nullable: true
+                    enum:
+                        - current_month
+                        - current_week
+                        - current_day
                 plan_id:
                     type: string
                 value_bool:
@@ -798,6 +849,11 @@ components:
                     nullable: true
                 value_type:
                     type: string
+                    enum:
+                        - Boolean
+                        - Numeric
+                        - Trait
+                        - Unlimited
             required:
                 - plan_id
                 - feature_id
@@ -819,6 +875,10 @@ components:
                 metric_period:
                     type: string
                     nullable: true
+                    enum:
+                        - current_month
+                        - current_week
+                        - current_day
                 value_bool:
                     type: boolean
                     nullable: true
@@ -830,43 +890,15 @@ components:
                     nullable: true
                 value_type:
                     type: string
+                    enum:
+                        - Boolean
+                        - Numeric
+                        - Trait
+                        - Unlimited
             required:
                 - feature_id
                 - value_type
             title: CreateReqCommon
-        CreateRuleRequestBody:
-            type: object
-            properties:
-                condition_groups:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/CreateOrUpdateConditionGroupRequestBody'
-                conditions:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/CreateOrUpdateConditionRequestBody'
-                flag_id:
-                    type: string
-                    nullable: true
-                name:
-                    type: string
-                plan_id:
-                    type: string
-                    nullable: true
-                priority:
-                    type: integer
-                priority_group:
-                    type: integer
-                    nullable: true
-                value:
-                    type: boolean
-            required:
-                - condition_groups
-                - conditions
-                - name
-                - priority
-                - value
-            title: CreateRuleRequestBody
         DeleteResponse:
             type: object
             properties:
@@ -985,8 +1017,71 @@ components:
                 - created_at
                 - updated_at
             title: EnvironmentResponseData
+        EventListResponseData:
+            type: object
+            properties:
+                api_key:
+                    type: string
+                    nullable: true
+                body_preview:
+                    type: string
+                captured_at:
+                    type: string
+                    format: date-time
+                company_id:
+                    type: string
+                    nullable: true
+                enriched_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                environment_id:
+                    type: string
+                    nullable: true
+                error_message:
+                    type: string
+                    nullable: true
+                feature_id:
+                    type: string
+                    nullable: true
+                id:
+                    type: string
+                loaded_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                processed_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                sent_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                status:
+                    type: string
+                subtype:
+                    type: string
+                    nullable: true
+                type:
+                    type: string
+                updated_at:
+                    type: string
+                    format: date-time
+                user_id:
+                    type: string
+                    nullable: true
+            required:
+                - body_preview
+                - captured_at
+                - type
+                - id
+                - status
+                - updated_at
+            title: EventListResponseData
         EventResponseData:
             type: object
+            description: The returned resource
             properties:
                 api_key:
                     type: string
@@ -1624,6 +1719,8 @@ components:
                 priority_group:
                     type: integer
                     nullable: true
+                rule_type:
+                    type: string
                 updated_at:
                     type: string
                     format: date-time
@@ -1634,6 +1731,7 @@ components:
                 - environment_id
                 - priority
                 - name
+                - rule_type
                 - value
                 - created_at
                 - updated_at
@@ -1663,6 +1761,8 @@ components:
                 priority_group:
                     type: integer
                     nullable: true
+                rule_type:
+                    type: string
                 updated_at:
                     type: string
                     format: date-time
@@ -1673,6 +1773,7 @@ components:
                 - environment_id
                 - priority
                 - name
+                - rule_type
                 - value
                 - created_at
                 - updated_at
@@ -1719,6 +1820,10 @@ components:
                 metric_period:
                     type: string
                     nullable: true
+                    enum:
+                        - current_month
+                        - current_week
+                        - current_day
                 value_bool:
                     type: boolean
                     nullable: true
@@ -1730,6 +1835,11 @@ components:
                     nullable: true
                 value_type:
                     type: string
+                    enum:
+                        - Boolean
+                        - Numeric
+                        - Trait
+                        - Unlimited
             required:
                 - value_type
             title: UpdateCompanyOverrideRequestBody
@@ -1738,6 +1848,11 @@ components:
             properties:
                 trait_type:
                     type: string
+                    enum:
+                        - bool
+                        - date
+                        - int
+                        - string
             required:
                 - trait_type
             title: UpdateEntityTraitDefinitionRequestBody
@@ -1747,6 +1862,10 @@ components:
                 environment_type:
                     type: string
                     nullable: true
+                    enum:
+                        - development
+                        - staging
+                        - production
                 name:
                     type: string
                     nullable: true
@@ -1763,6 +1882,10 @@ components:
                 feature_type:
                     type: string
                     nullable: true
+                    enum:
+                        - boolean
+                        - event
+                        - trait
                 flag:
                     $ref: '#/components/schemas/CreateOrUpdateFlagRequestBody'
                 lifecycle_phase:
@@ -1791,6 +1914,10 @@ components:
                 metric_period:
                     type: string
                     nullable: true
+                    enum:
+                        - current_month
+                        - current_week
+                        - current_day
                 value_bool:
                     type: boolean
                     nullable: true
@@ -1802,6 +1929,11 @@ components:
                     nullable: true
                 value_type:
                     type: string
+                    enum:
+                        - Boolean
+                        - Numeric
+                        - Trait
+                        - Unlimited
             required:
                 - value_type
             title: UpdatePlanEntitlementRequestBody
@@ -1819,6 +1951,10 @@ components:
                 metric_period:
                     type: string
                     nullable: true
+                    enum:
+                        - current_month
+                        - current_week
+                        - current_day
                 value_bool:
                     type: boolean
                     nullable: true
@@ -1830,6 +1966,11 @@ components:
                     nullable: true
                 value_type:
                     type: string
+                    enum:
+                        - Boolean
+                        - Numeric
+                        - Trait
+                        - Unlimited
             required:
                 - value_type
             title: UpdateReqCommon
@@ -2841,6 +2982,50 @@ paths:
                     $ref: '#/components/responses/NotFound'
                 "500":
                     $ref: '#/components/responses/ServerError'
+        delete:
+            operationId: deleteCompany
+            summary: Delete company
+            tags:
+                - companies
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: company_id
+                  in: path
+                  description: company_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/DeleteResponse'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: DeleteCompanyParams
+                                required:
+                                    - data
+                                    - params
+                                title: DeleteCompanyResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/ServerError'
     /companies/lookup:
         get:
             operationId: lookupCompany
@@ -3832,7 +4017,7 @@ paths:
                                         type: array
                                         description: The returned resources
                                         items:
-                                            $ref: '#/components/schemas/EventResponseData'
+                                            $ref: '#/components/schemas/EventListResponseData'
                                         title: ListEventsResponseData
                                     params:
                                         type: object
@@ -3907,7 +4092,7 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
-    /events/{event_id}:
+    /events/{key}:
         get:
             operationId: getEvent
             summary: Get event
@@ -3920,9 +4105,9 @@ paths:
                   schema:
                     type: string
                     title: EnvironmentIDParam
-                - name: event_id
+                - name: key
                   in: path
-                  description: event_id
+                  description: key
                   required: true
                   schema:
                     type: string
@@ -4353,7 +4538,7 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
-    /flag-checks/{flag_check_id}:
+    /flag-checks/{key}:
         get:
             operationId: getFlagCheck
             summary: Get flag check
@@ -4366,9 +4551,9 @@ paths:
                   schema:
                     type: string
                     title: EnvironmentIDParam
-                - name: flag_check_id
+                - name: key
                   in: path
-                  description: flag_check_id
+                  description: key
                   required: true
                   schema:
                     type: string
@@ -5725,148 +5910,6 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
-    /rules:
-        post:
-            operationId: createRule
-            summary: Create rule
-            tags:
-                - features
-            parameters:
-                - name: X-Schematic-Environment-Id
-                  in: header
-                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  schema:
-                    type: string
-                    title: EnvironmentIDParam
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/CreateRuleRequestBody'
-                required: true
-            responses:
-                "201":
-                    description: Created
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        $ref: '#/components/schemas/RuleDetailResponseData'
-                                    params:
-                                        type: object
-                                        description: Input parameters
-                                        title: CreateRuleParams
-                                required:
-                                    - data
-                                    - params
-                                title: CreateRuleResponse
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "500":
-                    $ref: '#/components/responses/ServerError'
-    /rules/{rule_id}:
-        get:
-            operationId: getRule
-            summary: Get rule
-            tags:
-                - features
-            parameters:
-                - name: X-Schematic-Environment-Id
-                  in: header
-                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  schema:
-                    type: string
-                    title: EnvironmentIDParam
-                - name: rule_id
-                  in: path
-                  description: rule_id
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        $ref: '#/components/schemas/RuleDetailResponseData'
-                                    params:
-                                        type: object
-                                        description: Input parameters
-                                        title: GetRuleParams
-                                required:
-                                    - data
-                                    - params
-                                title: GetRuleResponse
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/ServerError'
-        put:
-            operationId: updateRule
-            summary: Update rule
-            tags:
-                - features
-            parameters:
-                - name: X-Schematic-Environment-Id
-                  in: header
-                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
-                  schema:
-                    type: string
-                    title: EnvironmentIDParam
-                - name: rule_id
-                  in: path
-                  description: rule_id
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/UpdateRuleRequestBody'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    data:
-                                        $ref: '#/components/schemas/RuleDetailResponseData'
-                                    params:
-                                        type: object
-                                        description: Input parameters
-                                        title: UpdateRuleParams
-                                required:
-                                    - data
-                                    - params
-                                title: UpdateRuleResponse
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/ServerError'
     /users:
         get:
             operationId: listUsers
@@ -6022,6 +6065,50 @@ paths:
                     $ref: '#/components/responses/Forbidden'
                 "404":
                     $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/ServerError'
+        delete:
+            operationId: deleteUser
+            summary: Delete user
+            tags:
+                - companies
+            parameters:
+                - name: X-Schematic-Environment-Id
+                  in: header
+                  description: If the request is made using an API key that is not environment-scoped, specify the environment using this header
+                  schema:
+                    type: string
+                    title: EnvironmentIDParam
+                - name: user_id
+                  in: path
+                  description: user_id
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/DeleteResponse'
+                                    params:
+                                        type: object
+                                        description: Input parameters
+                                        title: DeleteUserParams
+                                required:
+                                    - data
+                                    - params
+                                title: DeleteUserResponse
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
                 "500":
                     $ref: '#/components/responses/ServerError'
     /users/lookup:
