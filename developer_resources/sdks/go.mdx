@@ -131,6 +131,32 @@ func main() {
 ```
 
 
+### Sending identify events
+
+Create or update users and companies using identify events.
+
+```go
+func main() {
+  client := schematic.NewClient(os.Getenv("SCHEMATIC_API_KEY"))
+
+  eventBody := NewEventBodyIdentify(map[string]any{
+    "email":   "wcoyote@acme.net",
+    "user-id": "your-user-id",
+  })
+  eventBody.SetCompany(map[string]any{
+    "id": "your-company-id",
+  })
+  eventBody.SetName("Wile E. Coyote")
+  eventBody.SetTraits(map[string]any{
+    "city":        "Atlanta",
+    "login_count": 24,
+    "is_staff":    false,
+  })
+
+  err := schematic.SendIdentifyEvent(context.Background(), client, body)
+}
+```
+
 ### Sending track events
 
 Track activity in your application using track events; these events can later be used to produce metrics for targeting.
@@ -148,7 +174,7 @@ func main() {
     "id": "your-company-id",
   })
 
-  err := schematic.SendIdentifyEvent(context.Background(), client, body)
+  err := schematic.SendTrackEvent(context.Background(), client, body)
 }
 ```
 
