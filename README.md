@@ -28,7 +28,7 @@ mintlify dev
 2. Genenerate API reference files:
 
 ```
-npx @mintlify/scraping@latest openapi-file openapi.yaml -o api-reference/
+npx @mintlify/scraping@latest openapi-file https://schematic-openapi-da6da39.s3.amazonaws.com/latest.yml -o api-reference/
 ```
 
 3. Update mint.json file to add, remove, or update references to the API references pages that need to be changed
