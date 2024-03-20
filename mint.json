@@ -1,9 +1,7 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "name": "Schematic Documentation",
-  "openapi": [
-    "/openapi.yaml"
-  ],
+  "openapi": "https://schematic-openapi-da6da39.s3.amazonaws.com/latest.yml",
   "logo": {
     "dark": "logo/white-text.png",
     "light": "logo/black-text.png"
@@ -14,7 +12,6 @@
     }
   },
   "favicon": "/favicon.png",
-  "feedback.thumbsRating": true,
   "colors": {
     "primary": "#DB6769",
     "light": "#DE8284",
@@ -122,7 +119,9 @@
         "api-reference/plans/create-plan",
         "api-reference/plans/get-plan",
         "api-reference/plans/update-plan",
-        "api-reference/plans/delete-plan"
+        "api-reference/plans/delete-plan",
+        "api-reference/plans/update-plan-audience",
+        "api-reference/plans/delete-plan-audience"
       ]
     },
     {
@@ -135,12 +134,14 @@
         "api-reference/companies/list-company-memberships",
         "api-reference/companies/create-company-membership",
         "api-reference/companies/delete-company-membership",
-        "api-reference/companies/list-company-plans"
+        "api-reference/companies/list-company-plans",
+        "api-reference/companies/create-company-trait"
       ]
     },
     {
       "group": "Traits",
       "pages": [
+        "api-reference/companies/create-entity-trait-definition",
         "api-reference/companies/update-entity-trait-definition"
       ]
     },
@@ -150,7 +151,8 @@
         "api-reference/companies/list-users",
         "api-reference/companies/create-user",
         "api-reference/companies/lookup-user",
-        "api-reference/companies/delete-user"
+        "api-reference/companies/delete-user",
+        "api-reference/companies/create-user-trait"
       ]
     },
     {
