@@ -98,8 +98,8 @@
       "group": "API Keys",
       "pages": [
         "api-reference/accounts/list-api-keys",
-        "api-reference/accounts/create-api-key",
         "api-reference/accounts/get-api-key",
+        "api-reference/accounts/create-api-key",
         "api-reference/accounts/update-api-key",
         "api-reference/accounts/delete-api-key"
       ]
@@ -116,32 +116,33 @@
       "group": "Plans",
       "pages": [
         "api-reference/plans/list-plans",
-        "api-reference/plans/create-plan",
         "api-reference/plans/get-plan",
+        "api-reference/plans/create-plan",
         "api-reference/plans/update-plan",
         "api-reference/plans/delete-plan",
-        "api-reference/plans/update-plan-audience",
-        "api-reference/plans/delete-plan-audience"
+        "api-reference/plans/update-audience",
+        "api-reference/plans/delete-audience"
       ]
     },
     {
       "group": "Companies",
       "pages": [
         "api-reference/companies/list-companies",
-        "api-reference/companies/create-company",
+        "api-reference/companies/upsert-company",
         "api-reference/companies/lookup-company",
         "api-reference/companies/delete-company",
+        "api-reference/companies/delete-company-by-keys",
         "api-reference/companies/list-company-memberships",
-        "api-reference/companies/create-company-membership",
+        "api-reference/companies/get-or-create-company-membership",
         "api-reference/companies/delete-company-membership",
         "api-reference/companies/list-company-plans",
-        "api-reference/companies/create-company-trait"
+        "api-reference/companies/upsert-company-trait"
       ]
     },
     {
       "group": "Traits",
       "pages": [
-        "api-reference/companies/create-entity-trait-definition",
+        "api-reference/companies/get-or-create-entity-trait-definition",
         "api-reference/companies/update-entity-trait-definition"
       ]
     },
@@ -149,19 +150,19 @@
       "group": "Users",
       "pages": [
         "api-reference/companies/list-users",
-        "api-reference/companies/create-user",
         "api-reference/companies/lookup-user",
+        "api-reference/companies/upsert-user",
         "api-reference/companies/delete-user",
-        "api-reference/companies/create-user-trait"
+        "api-reference/companies/delete-user-by-keys",
+        "api-reference/companies/upsert-user-trait"
       ]
     },
     {
       "group": "Events",
       "pages": [
-        "api-reference/events/list-event-types",
-        "api-reference/events/get-event-type",
         "api-reference/events/list-events",
         "api-reference/events/create-event",
+        "api-reference/events/create-event-batch",
         "api-reference/events/get-event"
       ]
     },
@@ -169,8 +170,8 @@
       "group": "Features",
       "pages": [
         "api-reference/features/list-features",
-        "api-reference/features/create-feature",
         "api-reference/features/get-feature",
+        "api-reference/features/create-feature",
         "api-reference/features/update-feature",
         "api-reference/features/delete-feature"
       ]
@@ -178,16 +179,17 @@
     {
       "group": "Flags",
       "pages": [
-        "api-reference/features/list-flag-checks",
-        "api-reference/features/latest-flag-checks",
         "api-reference/features/list-flags",
-        "api-reference/features/create-flag",
         "api-reference/features/get-flag",
+        "api-reference/features/create-flag",
         "api-reference/features/update-flag",
         "api-reference/features/delete-flag",
+        "api-reference/features/update-flag-rules",
         "api-reference/features/check-flag",
         "api-reference/features/check-flags",
-        "api-reference/features/rules-flag"
+        "api-reference/features/list-flag-checks",
+        "api-reference/features/get-flag-check",
+        "api-reference/features/get-latest-flag-checks"
       ]
     },
     {
