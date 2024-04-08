@@ -1,0 +1,36 @@
+---
+title: "Endpoint and schema overview"
+description: ""
+---
+
+## **Companies**
+
+The `Company` object describes companies within your application. A new `Company` is created when it is submitted via the API or, if connected and mapped, via third party integrations (e.g. provisioning a new company after a sale). Companies may be updated in a similar fashion.
+
+An `id` is auto-generated for each `Company` , but they can also have 1 or many `keys` , which serve as unique identifiers that can be referenced via the API or by other systems when creating, retrieving, or updating Companies in Schematic.
+
+## **Users**
+
+The `User` object describes users within your application. A new User is created when it is submitted with `keys` via the API or, if connected and mapped, via third party integrations (e.g. provisioning new users on an existing company). Users may be updated in a similar fashion.
+
+An `id` is auto-generated for each `User` , but they can also have 1 or many `keys` , which serve as unique identifiers that can be referenced via the API or by other systems when creating, retrieving, or updating users in Schematic.
+
+## **Events**
+
+The `Event` object describes events from your application that can be associated with `Users` , `Companies`, and `Features`. A new `Event` is created when it is submitted via the API. 
+
+Events are typically sent to Schematic to create or update `Users` or `Companies` (identify events), or to log usage events (track events).
+
+Track events can have any number of subtypes denoting what event is being tracked (e.g. `query_run`, `endpoint_added`, etc.). Properties (e.g. `num_users`, `num_endpoints`, etc.) can be `Events` but we recommend they be submitted as traits on the `Company` and `User` objects.
+
+## **Features**
+
+The `Feature` object describes features within your application. A new `Feature` is created in Schematic or via the API.
+
+A Feature can target `Users` and `Companies` with rules. Rules can be based on objects, traits, or events.
+
+## **Plans**
+
+The `Plan` object describes plans in your application.
+
+`Plans` can be associated with `Companies` based rule-based plan targeting.
