@@ -90,9 +90,7 @@
     },
     {
       "group": "API Documentation",
-      "pages": [
-        "api-reference/authentication"
-      ]
+      "pages": ["api-reference/authentication"]
     },
     {
       "group": "API Keys",
@@ -195,6 +193,7 @@
     {
       "group": "Entitlements",
       "pages": [
+        "api-reference/entitlements/list-feature-usage",
         "api-reference/entitlements/list-company-overrides",
         "api-reference/entitlements/get-company-override",
         "api-reference/entitlements/create-company-override",
@@ -204,7 +203,8 @@
         "api-reference/entitlements/get-plan-entitlement",
         "api-reference/entitlements/create-plan-entitlement",
         "api-reference/entitlements/update-plan-entitlement",
-        "api-reference/entitlements/delete-plan-entitlement"
+        "api-reference/entitlements/delete-plan-entitlement",
+        "api-reference/entitlements/get-feature-usage-by-company"
       ]
     }
   ],
