@@ -9,6 +9,9 @@
   "analytics": {
     "gtm": {
       "tagId": "GTM-T9HDDC54"
+    },
+    "koala": {
+      "publicApiKey": "pk_ee2e40158023463db6e5867579c49328ba38"
     }
   },
   "favicon": "/favicon.png",
