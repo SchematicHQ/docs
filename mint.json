@@ -93,7 +93,7 @@
     },
     {
       "group": "API Documentation",
-      "pages": ["api-reference/authentication"]
+      "pages": [""]
     },
     {
       "group": "API Keys",
@@ -116,6 +116,7 @@
     {
       "group": "Plans",
       "pages": [
+        "api-reference/plans/plan",
         "api-reference/plans/list-plans",
         "api-reference/plans/get-plan",
         "api-reference/plans/create-plan",
@@ -128,6 +129,7 @@
     {
       "group": "Companies",
       "pages": [
+        "api-reference/companies/company",
         "api-reference/companies/list-companies",
         "api-reference/companies/upsert-company",
         "api-reference/companies/lookup-company",
@@ -150,6 +152,7 @@
     {
       "group": "Users",
       "pages": [
+        "api-reference/companies/user",
         "api-reference/companies/list-users",
         "api-reference/companies/lookup-user",
         "api-reference/companies/upsert-user",
@@ -161,6 +164,7 @@
     {
       "group": "Events",
       "pages": [
+        "api-reference/events/event",
         "api-reference/events/list-events",
         "api-reference/events/create-event",
         "api-reference/events/create-event-batch",
@@ -170,6 +174,7 @@
     {
       "group": "Features",
       "pages": [
+        "api-reference/features/feature",
         "api-reference/features/list-features",
         "api-reference/features/get-feature",
         "api-reference/features/create-feature",
@@ -180,6 +185,7 @@
     {
       "group": "Flags",
       "pages": [
+        "api-reference/features/flag",
         "api-reference/features/list-flags",
         "api-reference/features/get-flag",
         "api-reference/features/create-flag",
