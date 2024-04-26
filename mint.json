@@ -92,10 +92,6 @@
       ]
     },
     {
-      "group": "API Documentation",
-      "pages": [""]
-    },
-    {
       "group": "API Keys",
       "pages": [
         "api-reference/accounts/list-api-keys",
