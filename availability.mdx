@@ -11,8 +11,4 @@ Schematic maintains a cache to minimize latency for every request.
 
 ### Local caching
 
-There are two ways to evaluate flags with Schematic: at runtime or via locally stored flag values. In memory flag values can be updated periodically by requesting data from Schematic using the batch endpoint [here](/api-reference/features/list-flag-values). In the future, Schematic will invest in additional solutions for a local or persistent cache.  
-
-### Third party integrations
-
-Schematic connects to third party applications via Fivetran, which handles ETL (including retry and incremental sync logic) from those tools into Schematic. Once data is loaded into Schematic, it is processed to map onto objects within the solution and made available for rule-based targeting.
+There are two ways to evaluate flags with Schematic: at runtime or via locally stored flag values. In memory flag values can be updated periodically by requesting data from Schematic using the batch endpoint [here](/api-reference/features/list-flag-values). In the future, Schematic will invest in additional solutions for a local or persistent cache. 
