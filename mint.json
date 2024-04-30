@@ -94,7 +94,10 @@
     },
     {
       "group": "API Documentation",
-      "pages": ["api-reference/resources"]
+      "pages": ["api-reference/resources",
+                "api-reference/authentication",
+                "api-reference/pagination",
+                "api-reference/rate_limiting"]
     },
     {
       "group": "API Keys",
