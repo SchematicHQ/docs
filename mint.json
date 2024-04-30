@@ -147,13 +147,6 @@
       ]
     },
     {
-      "group": "Traits",
-      "pages": [
-        "api-reference/companies/get-or-create-entity-trait-definition",
-        "api-reference/companies/update-entity-trait-definition"
-      ]
-    },
-    {
       "group": "Users",
       "pages": [
         "api-reference/companies/user",
@@ -206,7 +199,6 @@
     {
       "group": "Entitlements",
       "pages": [
-        "api-reference/entitlements/list-feature-usage",
         "api-reference/entitlements/list-company-overrides",
         "api-reference/entitlements/get-company-override",
         "api-reference/entitlements/create-company-override",
@@ -216,7 +208,13 @@
         "api-reference/entitlements/get-plan-entitlement",
         "api-reference/entitlements/create-plan-entitlement",
         "api-reference/entitlements/update-plan-entitlement",
-        "api-reference/entitlements/delete-plan-entitlement",
+        "api-reference/entitlements/delete-plan-entitlement"
+      ]
+    },
+    {
+      "group": "Feature Usage",
+      "pages": [
+        "api-reference/entitlements/list-feature-usage",
         "api-reference/entitlements/get-feature-usage-by-company"
       ]
     }
