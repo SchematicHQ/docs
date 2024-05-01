@@ -11,11 +11,11 @@ The Schematic API has a number of safeguards against bursts of requests to help 
 Users should treat these limits as maximums and should avoid designing systems that generate uneccessary load. To request an increased rate limit, please contact support so we can understand the use case.
 
 Common causes and mitigations:
-1. **Batched upserts to companies/users within Schematic.** Often, Tthis occurs if a daily cron job is set up to update traits within Schematic. We suggest either spacing out requests to our API or transitioning upserts to using identify calls via our event capture service.
+1. **Batched upserts to companies/users within Schematic.** Often, This occurs if a daily cron job is set up to update traits within Schematic. We suggest either spacing out requests to our API or transitioning upserts to using identify calls via our event capture service.
 2. **Concurent flag checks.** Often, this occurs when flag values are retrieved synchronously. We suggest using our bulk flag check endpoint to retrieve flag values asynchronously and caching those results locally.
 
 ## Handling limiting gracefully
 
 A basic technique to gracefully handle rate limiting is to build in a retry mechanism. The retry mechanism should follow an exponential backoff schedule to reduce request volume when necessary. 
 
-We also recommend implementign local caching with a TTL (either via our SDK or implemented independently).
+We also recommend implementing local caching with a TTL (either via our SDK or implemented independently).
