@@ -5,10 +5,14 @@ description: ""
 
 As a business implementing Schematic, we understand you are trusting the solution to be highly available and reliable. Given the nature of the transactions that Schematic supports for businesses, we’re committed to both. 
 
-Your application uses Schematic SDKs to connect to Schematic and uses that connection to share context about your companies and users, as well as to evaluate flags based on rule-based targeting set up in the application on anything you specify. Our SDKs are [here](/introduction#sdks).
+Your application connects to Schematic using our SDKs to share context about companies and users, andtto retrieve flags values based on policies set up in Schematic. Our SDKs are [here](/introduction#sdks). If you need support for an SDK that is not listed, please [contact us](mailto:hi@schematichq.com).
 
 Schematic maintains a cache to minimize latency for every request.
 
+<insert diagram of how caching works in Schematic>
+
 ### Local caching
 
-There are two ways to evaluate flags with Schematic: at runtime or via locally stored flag values. In memory flag values can be updated periodically by requesting data from Schematic using the batch endpoint [here](/api-reference/features/list-flag-values). In the future, Schematic will invest in additional solutions for a local or persistent cache. 
+You can synchronously retrieve flag values from Schematic using our flag check endpoint. However, we recommend retrieving flag values asynchronously using our [batch flag check endpoint](/api-reference/features/list-flag-values) and storing those values locally with periodic updates.
+
+Schematic also supports local caching natively in our Go SDK (with more coverage for other SDKs in the future). Upon initialization of the SDK, you have the option to specify the max size of the cache and the max age of the cache (or disable it entirely if you choose to build your own).
