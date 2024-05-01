@@ -71,6 +71,7 @@
       "pages": [
         "developer_resources/concepts",
         "developer_resources/environments",
+        "developer_resources/erd",
         {
           "group": "SDKs",
           "pages": [
