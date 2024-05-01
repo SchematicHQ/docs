@@ -60,6 +60,7 @@
       "group": "Get Started",
       "pages": [
         "introduction",
+        "howto",
         "quickstart",
         "availability",
         "observability",
