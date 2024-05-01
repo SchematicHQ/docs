@@ -71,6 +71,7 @@
       "pages": [
         "developer_resources/concepts",
         "developer_resources/environments",
+        "developer_resources/erd",
         {
           "group": "SDKs",
           "pages": [
@@ -94,7 +95,10 @@
     },
     {
       "group": "API Documentation",
-      "pages": ["api-reference/resources"]
+      "pages": ["api-reference/resources",
+                "api-reference/authentication",
+                "api-reference/pagination",
+                "api-reference/rate_limiting"]
     },
     {
       "group": "API Keys",
@@ -141,13 +145,6 @@
         "api-reference/companies/delete-company-membership",
         "api-reference/companies/list-company-plans",
         "api-reference/companies/upsert-company-trait"
-      ]
-    },
-    {
-      "group": "Traits",
-      "pages": [
-        "api-reference/companies/get-or-create-entity-trait-definition",
-        "api-reference/companies/update-entity-trait-definition"
       ]
     },
     {
@@ -203,7 +200,6 @@
     {
       "group": "Entitlements",
       "pages": [
-        "api-reference/entitlements/list-feature-usage",
         "api-reference/entitlements/list-company-overrides",
         "api-reference/entitlements/get-company-override",
         "api-reference/entitlements/create-company-override",
@@ -213,7 +209,13 @@
         "api-reference/entitlements/get-plan-entitlement",
         "api-reference/entitlements/create-plan-entitlement",
         "api-reference/entitlements/update-plan-entitlement",
-        "api-reference/entitlements/delete-plan-entitlement",
+        "api-reference/entitlements/delete-plan-entitlement"
+      ]
+    },
+    {
+      "group": "Feature Usage",
+      "pages": [
+        "api-reference/entitlements/list-feature-usage",
         "api-reference/entitlements/get-feature-usage-by-company"
       ]
     }
