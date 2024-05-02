@@ -9,10 +9,8 @@ Your application connects to Schematic using our SDKs to share context about com
 
 Schematic maintains a cache to minimize latency for every request.
 
-<insert diagram of how caching works in Schematic>
-
 ### Local caching
 
-You can synchronously retrieve flag values from Schematic using our flag check endpoint. However, we recommend retrieving flag values asynchronously using our [batch flag check endpoint](/api-reference/features/list-flag-values) and storing those values locally with periodic updates.
+You can synchronously retrieve flag values from Schematic using our flag check endpoint. However, we recommend retrieving flag values asynchronously using our [batch flag check endpoint](/api-reference/features/check-flags) and storing those values locally with periodic updates.
 
 Schematic also supports local caching natively in our Go SDK (with more coverage for other SDKs in the future). Upon initialization of the SDK, you have the option to specify the max size of the cache and the max age of the cache (or disable it entirely if you choose to build your own).
