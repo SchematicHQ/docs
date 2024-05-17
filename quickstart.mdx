@@ -3,6 +3,8 @@ title: 'Quickstart'
 description: 'Start using Schematic in under 5 minutes'
 ---
 
+This guide will use the Python SDK where there are interactions with the Schematic API.
+
 ## Create environments and keys
 
 ### Setting up dev and prod environments
@@ -10,7 +12,7 @@ description: 'Start using Schematic in under 5 minutes'
 Manage and create new environments using the environment dropdown in the top right corner of Schematic. You can create API keys for each environment indpedently in Settings.
 
 <img
-  src="/images/quickstart_api_1.png"
+src="/images/quickstart_api_1.png"
 />
 
 ### Create an API key
@@ -18,9 +20,8 @@ Manage and create new environments using the environment dropdown in the top rig
 Navigate to the API Keys section of your Settings page to generate your API keys. Once you create a key, an ID and a Secret will be generated. Make sure to store your Secret key in a secure place — Schematic will not display it again after it has been generated.
 
 <img
-  src="/images/quickstart_api_2.png"
+src="/images/quickstart_api_2.png"
 />
-
 
 **Secret Keys** are used only for server-side integrations. These keys are meant to be confidential, so they should not be used on clients.
 
@@ -28,12 +29,12 @@ Navigate to the API Keys section of your Settings page to generate your API keys
 
 All keys are environment scoped.
 
-### Checking API Logs
+### Checking the Audit Log
 
-You can view API logs [here](https://app.schematichq.com/settings/api-logs). 
+You can view the Audit log [here](https://app.schematichq.com/settings/api-logs).
 
 <img
-  src="/images/quickstart_api_2a.png"
+src="/images/quickstart_api_2a.png"
 />
 
 Within each request, you can view detail describing the response code, request ID, start/end times, the API key used, the method, the URL path, and the request & response payloads.
@@ -42,43 +43,134 @@ Within each request, you can view detail describing the response code, request I
 
 Now that you have your Schematic account set up and you have an API key, let’s set up users and companies.
 
-1. **Add the Javascript SDK**
+There are two methods to submit companies to Schematic:
 
-Let’s go ahead and make an identify call using the Javascript SDK.
+- Sending Schematic identify calls
+- Using the  company upsert endpoint
 
-<Info>ℹ️ Schematic supports several SDKs. Check them out [here](/introduction#sdks).</Info>
+We’ll use the latter below method below.
 
-The schematic-js SDK is hosted here: https://cdn.schematichq.com/js/schematic.js. Copy and paste the following code into your console:
+1. **Create a new company**
 
-```javascript
-var sch_script = document.createElement("script");
-sch_script.src =
-  "https://cdn.schematichq.com/js/schematic.js";
-document.getElementsByTagName("head")[0].appendChild(sch_script);
+Initialize the Python SDK and copy/paste the following:
+
+```python
+from schematic.client import Schematic
+
+# initialize the client
+client = Schematic(
+    api_key = "your-api-key"
+)
+
+# create company in Schematic
+response = client.companies.upsert_company(
+    keys={
+        "companyId":"FqaaszD"
+    },
+    name="Example Company",
+    traits={
+        "package":"Basic"
+    }
+)
 ```
 
-<img
-  src="/images/quickstart_company_1.png"
-/>
+<Info>  Schematic uses `keys` as unique identifiers for companies and users. You should populate this field with your own internal identifiers so that subsequent calls via the API referencing a given user or company can be done without having to persist Schematic IDs.</Info>
 
+You should receive a response like this if the call was successful:
 
-2. **Initialize the Javascript SDK**
-
-Copy and paste the following into your console and replace `your-api-key` with your [Publishable API key](https://schematic.mintlify.app/docs/quickstart#create-an-api-key):
-
-```javascript
-const schematic = new Schematic("your-api-key");
+```json
+{
+    "data": {
+        "created_at": "2024-05-17T19:26:52.933973Z",
+        "entity_traits": [
+            {
+                "created_at": "2024-05-17T19:26:52.937330Z",
+                "definition": {
+                    "created_at": "2023-12-29T13:30:28.550833Z",
+                    "display_name": "Package",
+                    "entity_type": "company",
+                    "hierarchy": [
+                        "package"
+                    ],
+                    "id": "trt_1825bpc61gY",
+                    "trait_type": "string",
+                    "updated_at": "2023-12-29T13:30:28.550833Z"
+                },
+                "definition_id": "trt_1825bpc61gY",
+                "environment_id": "env_W2KCnRmbjpN",
+                "id": "etr_9aRxHj22b25",
+                "updated_at": "2024-05-17T19:26:52.937330Z",
+                "value": "Basic"
+            }
+        ],
+        "environment_id": "env_W2KCnRmbjpN",
+        "id": "comp_JaoafW2wqzL",
+        "keys": [
+            {
+                "created_at": "2024-05-17T19:26:52.935538Z",
+                "definition": {
+                    "created_at": "2023-10-04T14:09:13.064812Z",
+                    "entity_type": "company",
+                    "id": "ekt_hfBCRsZPDPJ",
+                    "key": "account_id",
+                    "updated_at": "2023-10-04T14:09:13.064812Z"
+                },
+                "definition_id": "ekt_hfBCRsZPDPJ",
+                "entity_id": "comp_JaoafW2wqzL",
+                "entity_type": "company",
+                "environment_id": "env_W2KCnRmbjpN",
+                "id": "ekey_K1BE6MTTH9c",
+                "key": "account_id",
+                "updated_at": "2024-05-17T19:26:52.935538Z",
+                "value": "123456"
+            }
+        ],
+        "last_seen_at": null,
+        "logo_url": null,
+        "name": "Example Company",
+        "plans": [],
+        "traits": {
+            "package": "Basic"
+        },
+        "updated_at": "2024-05-17T19:26:52.933973Z",
+        "user_count": 0
+    },
+    "params": {}
+}
 ```
 
+1. **Confirm the company appears in the Schematic app**
+
+Navigate to the [Companies](https://app.schematichq.com/companies) tab and search for "Example Company" to see the company in Schematic.
+
 <img
-  src="/images/quickstart_company_2.png"
+src="/images/quickstart_company_3.png"
 />
 
-3. **Create a new user and new company**
+## Sending track and identify calls
 
-Now that the Javascript SDK is initialized into the `schematic` variable, you can construct and send an identify call. Copy and paste the following into your console:
+Next, let’s start sending Schematic events from your application.
 
-```javascript
+Events are useful for a variety of use cases in Schematic:
+
+- To keep user and company profiles up to date with the latest context
+- To set up and enforce metered features
+- To track usage of your product across your customer base
+- To use context sent via events in plan audiences and in rule-based targeting for flags
+
+If you use Segment already, you can set up [the Schematic destination](/integrations/segment). If you do not, you can instrument events directly in your application.
+
+1. **Add the Javascript library to your application**
+
+Follow the guide to install the client-side Javascript library [here](https://docs.schematichq.com/developer_resources/sdks/javascript).
+
+<Info>Schematic supports several SDKs. Check them out [here](/developer_resources/sdks).</Info>
+
+1. **Create a new event**
+
+Let’s go ahead and instrument an identify call.
+
+```jsx
 const userId = "riF3NyX";
 const userName = "Example User"
 
@@ -92,47 +184,19 @@ const traits = {
 };
 
 const company = {
-  name: "Example Company",
   keys: {
     companyId: "FqaaszD"
-  },
-  traits: {
-    package: "Basic"
-  },
+  }
 };
 
 schematic.identify({ name: userName, keys, traits, company });
 ```
 
-<img
-  src="/images/quickstart_company_3.png"
-/>
+Identify calls are upserts, so any subsequent call using the same `keys` will update the associated user and company records rather than create entirely new ones. Additionally, you may use any data sent via these calles in plan audiences or flag rules.
 
-4. **Confirm the user and company were created in Schematic**
+Let’s send in a track call, as well.
 
-Navigate to the [Users](https://app.schematichq.com/users) and [Companies](https://app.schematichq.com/companies) tabs to verify your test call has resulted in a new User and a new Company in your Schematic account.
-
-<img
-  src="/images/quickstart_company_4.png"
-/>
-
-<img
-  src="/images/quickstart_company_5.png"
-/>
-
-Identify calls are upserts, so any subsequent call using the same `keys` will update these records rather than create an entirely new one. Additionally, you may use any information stored against both objects to construct rules for feature targeting within Schematic.
-
-## Logging events (and viewing them)
-
-Let’s start sending Schematic events from your application.
-
-1. **Create a new event**
-
-Follow the steps in [Creating companies and users](/quickstart#creating-companies-and-users) to initialize the Javascript SDK. 
-
-Once the the Javascript SDK is initialized into the ```schematic``` variable, you can construct and send a track call. Copy and paste the following into your console:
-
-```javascript
+```jsx
 const eventName = "query";
 
 const traits = {
@@ -155,142 +219,144 @@ schematic.track({
 });
 ```
 
-<img
-  src="/images/quickstart_events_3.png"
-/>
+Track calls can be associated with Companies, Users, and Features by specifying each when submitting a request to Schematic.
 
-Once Features are created in Schematic, you can associate events with them in the UI or by specifying the Feature ID generated by Schematic as a trait in the event payload using ```feature``` as a key in a key-value pair.
+2. **Confirm the events was created in Schematic** 
 
-2. **Confirm the event was created in Schematic**
-
-Navigate to the [Events](https://app.schematichq.com/events) tab to verify your test call has resulted in a new event in your Schematic account.
+Navigate to the [Events](https://app.schematichq.com/events) tab to verify your calls was successfully registered in your Schematic account.
 
 <img
-  src="/images/quickstart_events_4.png"
+src="/images/quickstart_events_4.png"
 />
 
-Track calls can be associated with Companies, Users, and Features by specifying each when submitting a request to Schematic. Additionally, you may use events to construct rules for feature targeting within Schematic.
+## Creating features
 
-## Creating and checking features
+Once we have companies and events flowing into Schematic, the next step is to add features to Schematic. Let’s add one in Schematic: Search Queries.
 
-The next step is to add your features to Schematic. Let’s add an example, Search Queries.
+<Info>You can [create features via our API](/api-reference/features/feature) as well</Info>
 
-1. **Create a new feature in the Schematic app**
+1. **Create a new feature in Schematic**
 
-On the main [dashboard](https://app.schematichq.com/features), click “Create”. In the modal, add a name, description, and pick the feature type (boolean, event-based, or trait-based). It’s important to add a complete description so that other users know exactly what this feature is tied to in your application.
+On the main [dashboard](https://app.schematichq.com/features), click “Create”. In the modal, add a name, description, and pick the event-based feature type.
 
 <img
-  src="/images/quickstart_features_1.png"
+src="/images/quickstart_features_1.png"
 />
 
-2. **Define a key flag**
+<Info>You can choose between Boolean, Event-based, or Trait-based feature types.</Info>
 
-You’ll use this key within your application to reference this feature.
+1. **Define a flag key**
+
+You’ll use this key in your application to reference this feature.
 
 <img
-  src="/images/quickstart_features_2.png"
+src="/images/quickstart_features_2.png"
 />
 
-3. **Attach a trait or event to the feature**
+1. **Attach an event to the feature**
 
-Depending on the feature type, add an event or trait to track usage and/or use while metering the feature. In this case, we'll add a `query` event.
+Add the `query` event to meter the feature and measure feature usage.
 
 <img
-  src="/images/quickstart_features_3.png"
+src="/images/quickstart_features_3.png"
 />
-
-4. **View the underlying flag to define rules**
-
-Once you’ve finished creating the feature, navigate to the Flag tab and click the menu to "View" the flag.
-
-<img
-  src="/images/quickstart_features_6.png"
-/>
-
-Within the flag view, click “Add a new rule” and use the available criteria to build targeting rules. In this example, we’re going to use the Company criteria to target [the company we created earlier](/quickstart#creating-companies-and-users), “Example Company”. Once you’ve set up the rule, click “Review” at the top of your screen to verify you’d like the rule to be added and “Save” in the modal.
-
-Now when checking whether this feature is available to “Example Company” within your application, Schematic will return True.
-
-<img
-  src="/images/quickstart_features_4.png"
-/>
-
-5. **Check the feature**
-
-Follow the steps in [Creating companies and users](/quickstart#creating-companies-and-users) to initialize the Javascript SDK. Once you have, copy and paste the below into your console. 
-
-We passed a key called “companyId” earlier when we created “Example Company”, and we can use it here so Schematic checks the feature and returns a result for “Example Company” specifically (this can also be done at the user level). Because Schematic creates user and company profiles by storing context and usage from your application and Stripe, it is not necessary to pass additional context when submitting a checkFlag request.
-
-<Info>checkFlag accepts any key that you established at the company or user level. Alternatively, you may use the id key to refer to the Schematic ID that is generated for each company.</Info>
-
-```javascript
-await schematic.checkFlag("search-queries", { company: { companyId: "FqaaszD" } } )
-```
-
-<img
-  src="/images/quickstart_features_5.png"
-/>
-
-<Info>On the client-side, checkFlag is an asynchronous Javascript function that returns a promise. Schematic supports several SDKs. Check them out [here](/introduction#sdks).</Info>
 
 ## Creating a plan and adding entitlements
 
-Plans describes plans in your application. Let’s walk through creating a plan.
+Plans describe groups of entitlements. Let’s walk through creating one. Navigate to the plans tab and click “Create".
 
 1. **Create a plan**
 
-Navigate to the plans tab and click “Create plan”. Add name, a description, and a type.
+Add name and a description.
 
 <img
-  src="/images/quickstart_plans_1.png"
+src="/images/quickstart_plans_1.png"
 />
 
 2. **Add an entitlement to the plan**
 
-Entitlements can be created from the feature page or from the plan page. In this case, we'll add the entitlement from the plan page and specify how the entitlement associated with the Search Query feature should be described for the Basic plan. 
+Click **Add Feature** to add an entitlement and specify the limit for Search Query for the Basic plan.
 
-Event-based and trait-based features can have no limit, some numerical limit that is static within a period, or a limit that is dynamic based on traits that exist at the company level (e.g. some allocation that was sold directly to a given company).
+Event-based features can have no limit, some numerical limit that is static within a period, or a limit that is dynamic based on traits that exist at the company level (e.g. some allocation that was sold directly to a given company).
 
 <img
-  src="/images/quickstart_plans_2.png"
+src="/images/quickstart_plans_2.png"
 />
 
 The Search Query feature can be added to other plans created in this account if we were to create them, and in each plan it may be entitled differently than the Basic plan.
 
 3. **Target companies with an plan audiences**
 
-Similar to how we used rules at the flag level, we can set up an audience at the plan level to add [the company we created earlier](/quickstart#creating-companies-and-users) to the Basic plan so that it receives all entitlements associated with the plan.
+Let’s set up an audience in the **Audience** tab to add [the company we created earlier](/quickstart#creating-companies-and-users) to the Basic plan so that it receives all entitlements associated with the plan.
+
+In the plan audience, we're referring to a trait created at the company level for this audience, `Package`. Audience conditions can be logical ORs or ANDs if they have multiple conditions.
 
 <img
-  src="/images/quickstart_plans_3.png"
+src="/images/quickstart_plans_3.png"
 />
 
-In our audience, we're referring to a trait created at the company level for this audience, ```Package```. Audience conditions can be logical ORs or ANDs, but we only need one here.
+Only Example Company exists within our account, and it matches the condition in the audience. Once we click **Review and Save**, Example Company will receive all of the entitlements in the Basic plan.
 
-We can now preview the audience to see which companies and users in Schematic match the given condition.
+## Evaluating entitlements
 
-<img
-  src="/images/quickstart_plans_4.png"
-/>
+Finally, let’s check the entitlements for Example Company. 
 
-Only Example Company exists within our account, and it matches the condition in the audience. Once we save the audience, Example Company is associated with this plan and will receive all of the entitlements in the Basic plan.
+The flag check is the main point of integration between Schematic and your application, and all of the rules set up above are accessed via this simple interface so that none of it has to live in your application.
 
-<img
-  src="/images/quickstart_plans_5.png"
-/>
+1. **Check entitlements**
 
-More specifically, the flag check we did earlier will refer to the entitlements in the Basic plan to return a result.
+The only context you need to evaluate entitlements from your application is the key you passed earlier when you created “Example Company”. You do not need to store any data about products, features, or rules.
+
+<Info>checkFlags accepts any key that you submit when you upsert companies.</Info>
+
+Use the following code to perform a bulk flag check.
+
+```python
+from schematic.client import Schematic
+
+# initialize the client
+client = Schematic(
+    api_key = "your-api-key"
+)
+
+# build context to reference company
+company_context = {
+    "account_id":"123456"
+}
+
+# request latest flag evaluation from Schematic based on rules in system
+response = client.features.check_flags(
+    company=company_context,
+)
+```
+
+You should receive a response like the below if the call was successful that returns all flags defined in your Schematic instance (in this case, there is only one), including which entitlements the company should be granted access to. Example Company should be granted access to `search-queries` because the value that is returned is `true`.
+
+<Info>For metered features, Schematic keeps track of consumption and limits and returns false when a company has surpassed a limit</Info>
+
+```json
+{
+    "data": {
+        "flags": [
+						{
+                "company_id": "comp_JaoafW2wqzL",
+                "flag": "search-queries",
+                "reason": "Matched rule rule_UG7yHTc86i1",
+                "rule_id": "rule_UG7yHTc86i1",
+                "user_id": null,
+                "value": true
+            }
+        ]
+    },
+    "params": {}
+}
+```
+
+## Additional context
 
 A few things to note about how flag checks are evaluated:
-* Companies can be associated with multiple plans as long as they match the plan audience conditions.
-* If a company no longer meets the conditions of a plan audience, they will no longer be associated with the corresponding plan and lose the respective entitlements.
-* Companies may have explicit entitlements that are described as "Company overrides" (not covered in this guide but can be configured on the individual company page)
-* Schematic employs a permissive flag evaluation model -- in other words, if a company has entitlements, overrides, and individual flag targeting that conflict, the most permissive will prevail.
 
-
-
-
-
-
-
-
+- Companies can be associated with multiple plans as long as they match the plan audience conditions.
+- If a company no longer meets the conditions of a plan audience, they will no longer be associated with the corresponding plan and lose the respective entitlements.
+- Companies may have explicit entitlements that are described as "Company overrides" (not covered in this guide but can be configured on an individual company page)
+- Schematic employs a permissive flag evaluation model -- in other words, if a company has entitlements, overrides, and individual flag targeting that conflict, the most permissive will prevail in the respective level.
