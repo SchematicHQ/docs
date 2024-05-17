@@ -42,7 +42,7 @@ This catalog can be referenced across systems to inform sales, marketing, suppor
   src="/images/intro_profiles.png"
 />
 
-The Company Profile is a centralized record for company state, aggregating all relevant company traits, license details, and usage data into a single, coherent profile that can be leveraged across tools.
+The Company Profile is a centralized record for company state, aggregating all relevant company traits, subscription details, and usage data into a single, coherent profile that can be leveraged across tools.
 
 The profile is key-based and key uniqueness is enforced across profiles to prevent duplicates. Profiles can have multiple keys so any one key does not need to be replicated across systems.
 
@@ -58,24 +58,22 @@ Metering is crucial for supporting usage-based models. Metered properties can be
 
 A usage event can be attributed to companies, users, and features within Schematic, forming the basis for enforcement and insights into behavior.
 
-### Licenses
+### Subscriptions
 
 <img
   src="/images/intro_licenses.png"
 />
 
-Licenses are essentially a relationship between a plan in the Product Catalog and a Company Profile. This is intentionally rule-based in Schematic to handle exceptions.
+Subscriptions are essentially a relationship between a plan in the Product Catalog and a Company Profile. This is intentionally rule-based in Schematic to handle exceptions.
 
-A company may have more than one active license at any given time, which would result in a superset of entitlements among them.
+A company may have more than one active subscription at any given time, which would result in a superset of entitlements among them.
 
-### Entitlements
+### Flags
 
 <img
   src="/images/intro_entitlements.png"
 />
 
-Entitlements dictate who gets access to what features or services based on their context, and how much of a particular feature they get. This ensures customers can access only the features they should have access to, which is crucial for trials, tiered services, and premium offerings.
+Flags dictate who gets access to what features or services based on their context, and how much of a particular feature they get. This ensures customers can access only the features they should have access to, which is crucial for trials, tiered services, and premium offerings.
 
-Company access is driven by flag checks that occur at the feature level, informed by the parameters of a company’s license and other policy set up in Schematic.
-
-
+Company access is driven by flag checks that occur at the feature level, informed by the parameters of a company’s subscription and other policy set up in Schematic.
