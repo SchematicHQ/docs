@@ -1,0 +1,40 @@
+---
+title: Python
+description: ""
+icon: "python"
+iconType: "solid"
+---
+
+### Installation
+
+The Python SDK is hosted [here](https://pypi.org/project/schematichq/). Use pip or your preferred package manager to install:
+
+```bash
+pip install schematichq
+```
+
+### Initialization
+
+Initialize a client with an [API key secret](/quickstart#create-an-api-key).
+
+```python
+from schematic.client import Schematic
+
+client = Schematic(
+  api_key = "sch_dev_yourapikey"
+)
+```
+
+### Usage example
+
+Once the SDK is initialized, you may submit requests. Below is an example of evaluating flags.
+
+```python
+company_context = {
+  "your-key-name" : "your-key-value"
+}
+
+response = client.features.check_flags(
+  company=company_context,
+)
+```

@@ -76,11 +76,12 @@
         {
           "group": "SDKs",
           "pages": [
-            "developer_resources/sdks/javascript",
-            "developer_resources/sdks/ruby",
-            "developer_resources/sdks/typescript-node",
             "developer_resources/sdks/go",
-            "developer_resources/sdks/php"
+            "developer_resources/sdks/typescript-node",
+            "developer_resources/sdks/python",
+            "developer_resources/sdks/javascript",
+            "developer_resources/sdks/php",
+            "developer_resources/sdks/ruby"
           ]
         }
       ]
@@ -88,10 +89,10 @@
     {
       "group": "Integrations",
       "pages": [
-        "integrations/salesforce",
-        "integrations/hubspot",
         "integrations/stripe",
-        "integrations/segment"
+        "integrations/segment",
+        "integrations/salesforce",
+        "integrations/hubspot"
       ]
     },
     {
