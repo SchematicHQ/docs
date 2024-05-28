@@ -77,7 +77,7 @@
           "group": "SDKs",
           "pages": [
             "developer_resources/sdks/go",
-            "developer_resources/sdks/typescript-node",
+            "developer_resources/sdks/nodejs",
             "developer_resources/sdks/python",
             "developer_resources/sdks/javascript",
             "developer_resources/sdks/php",
