@@ -55,14 +55,23 @@ For companies in Schematic that have an associated Stripe subscription, you can 
 
 ### Using within Flag Rules and Plan Audiences
 
-You can use subscrition data as criterion when building plan audiences or flag rules in Schematic. This allows you to clearly align what a customer is billed with what they have access to within your application.
+You can use subscription data as criterion when building plan audiences or flag rules in Schematic. This allows you to clearly align what a customer is billed with what they have access to within your application.
 
 <img
   src="/images/stripe_rules.png"
 />
 
+ ## Restricted key permissions
+
+If you are using a restricted key to connect to Schematic, make sure it has the following permissions:
+
+-   Web hooks
+-   Subscriptions
+-   Product
+-   Pricing
+
 ## Additional context
 
 The Stripe integration is environment-scoped, so you can have a separate connection in each Schematic environment.
 
-The initial reelase supports the use of basic subscription-level data for rule-based targeting. More billing data, e.g. product quantities and billing amounts, will be supported in future releases.c
+The initial reelase supports the use of basic subscription-level data for rule-based targeting. More billing data, e.g. product quantities and billing amounts, will be supported in future releases.
