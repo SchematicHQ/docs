@@ -1,9 +1,9 @@
 ---
-title: Creating a metered feature
+title: Rolling out beta features
 description: ""
 ---
 
-## What is a metered feature?
+## What is rollout of a feature?
 
 Metered features are features that have a pre-defined limit either set globally or on a per-company basis. This is a common packaging model in SaaS, and is often paired with features that may simply be on or off.
 
@@ -11,10 +11,8 @@ Metered features are features that have a pre-defined limit either set globally 
 
 There are two types of metered features in Schematic - trait-based and event-based.
 
-### Trait-based features
 **Trait-based** features are best suited for resource utilization that could increase or decrease. Some examples of features that fit this criteria are seats, projects, devices, etc. Traits should be upserted on company profiles to specify utilization against a pre-defined limit at the feature level.
 
-### Event-based features
 **Event-based** features are best suited for resource utilization that simply goes up, and/or is metered on a perodic basis (e.g. per day, per week, per month). Some examples of features that fit this criteria are API requests, queries, etc. Individual events should be sent into Schematic, which will be automatically aggregated to calculate utilization against a pre-defined limit at the feature level.
 
 ## Setting up an Event-based metered feature
