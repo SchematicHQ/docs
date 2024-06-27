@@ -98,7 +98,8 @@
     {
       "group": "Playbooks",
       "pages": [
-        "playbooks/metering"
+        "playbooks/metering",
+        "playbooks/rollout"
       ]
     },
     {
