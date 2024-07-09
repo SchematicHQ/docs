@@ -74,6 +74,12 @@
         "developer_resources/environments",
         "developer_resources/erd",
         {
+          "group": "Sample apps",
+          "pages": [
+            "developer_resources/sample_apps/sample_python"
+          ]
+        },
+        {
           "group": "SDKs",
           "pages": [
             "developer_resources/sdks/go",
